@@ -2,6 +2,7 @@ from src.config import DevelopmentConfig
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
 from src.opcua_communication.ClientOPCUA import ClientOPCUA
+from flask import Flask, jsonify, request
 
 import time
 import logging
@@ -68,6 +69,12 @@ def opcuaTest (config):
     print ("Final stock bananas: "  + str (varBananas.get_value ()))
     print ("Final stock apples: "   + str (varApples.get_value ()))
 
+### function: apiRestTest ###
+
+def apiRestTest ():
+    app = Flask (__name__)
+    app.run (debug = True, port = 8080)
+
 ########################################################################################################################
 #########################                            CLIMATE FRONT                            ##########################
 ########################################################################################################################
@@ -77,8 +84,9 @@ if __name__ == '__main__':
 
     logging.basicConfig (level = config.logLevel)
 
-    mongoTest (config)
-    opcuaTest (config)
+    #mongoTest (config)
+    #opcuaTest (config)
+    apiRestTest ()
 
     while True:
         time.sleep (100000)
