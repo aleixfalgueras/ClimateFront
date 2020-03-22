@@ -22,9 +22,7 @@ lib64/
 parts/
 sdist/
 var/
-*.egg-info/
 .installed.cfg
-*.egg
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -93,23 +91,20 @@ ENV/
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
 [Bb]in
-[Ii]nclude
-[Ll]ib
+
 [Ll]ib64
 [Ll]ocal
-[Ss]cripts
-pyvenv.cfg
 .venv
-pip-selfcheck.json
+
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
-.idea/workspace.xml
+
 .idea/tasks.xml
 .idea/dictionaries
-.idea/vcs.xml
+
 .idea/jsLibraryMappings.xml
 
 # Sensitive or high-churn files:
@@ -122,7 +117,7 @@ pip-selfcheck.json
 
 # Gradle:
 .idea/gradle.xml
-.idea/libraries
+
 
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
