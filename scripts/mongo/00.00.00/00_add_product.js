@@ -1,6 +1,6 @@
-db.createCollection ("stock");
+db.createCollection ("product");
 
-db.stock.insertOne (
+db.product.insertOne (
     {
         "id" : "2",
         "name" : "tomatoe",
@@ -8,7 +8,7 @@ db.stock.insertOne (
     }
 );
 
-db.stock.insertOne (
+db.product.insertOne (
     {
         "id" : "3",
         "name" : "banana",
@@ -16,7 +16,7 @@ db.stock.insertOne (
     }
 );
 
-db.stock.insertOne (
+db.product.insertOne (
     {
         "id" : "4",
         "name" : "apple",

@@ -26,6 +26,6 @@ class SubscriptionMongoHandler () :
     def datachange_notification (self, node, val, data) :
         id = str (node) [26 :-2]  # Node(NumericNodeId(ns=2;i=2))
 
-        collection = self.mongoDatabase.getCollection ("stock")
+        collection = self.mongoDatabase.getCollection ("product")
 
         collection.updateOne ({"id" : id}, {"$set" : {"quantity" : str (val)}})
