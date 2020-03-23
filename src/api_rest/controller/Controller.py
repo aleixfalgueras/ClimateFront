@@ -1,4 +1,4 @@
-from src.api_rest.service.ProductService import getProducts
+from src.api_rest.service.ProductService import getProducts, getProduct
 from src.api_rest.utils import toJsonArray
 from flask import Flask, jsonify
 
@@ -8,13 +8,20 @@ app = Flask (__name__)
 # Product
 ################################################################################
 
-### GET
+### GET: get_products
 
 @app.route ('/products')
 def get_products ():
-    prodcuts = getProducts ()
+    return jsonify (toJsonArray (getProducts ()))
 
-    return jsonify (toJsonArray (prodcuts))
+### GET: get_product
+
+@app.route ('/products/<string:product_id>')
+def get_product (product_id):
+    product = getProduct (product_id)
+
+    if  len (product) == 0: return jsonify ({"message": "Not found product with the id " + product_id})
+    else:                   return jsonify (product[0].toJson ())
 
 
 ########################################################################################################################

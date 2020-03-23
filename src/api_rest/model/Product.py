@@ -20,3 +20,13 @@ class Product ():
 
     def toJson (self):
         return {"id" : self.id, "name" : self.name, "quantity" : self.quantity}
+
+
+### function: toProduct ###
+
+def toProduct (mongoCursor) :
+    products = []
+
+    for product in mongoCursor: products.append (Product (product ['id'], product ['name'], product ['quantity']))
+
+    return products
