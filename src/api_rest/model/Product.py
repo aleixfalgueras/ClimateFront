@@ -1,3 +1,5 @@
+from src.commons import MongoProductFields
+
 ################################################################################
 # class: Product
 ################################################################################
@@ -14,12 +16,18 @@ class Product ():
     ### function: __str__ ###
 
     def __str__ (self) :
-        return "Product (id: " + self.id + ", name: " + self.name + ", quantity: " + self.quantity + ")"
+        return "Product (" + MongoProductFields.ID + ": " + self.id + ", " + \
+               MongoProductFields.NAME + ": " + self.name + ", " + \
+               MongoProductFields.QUANTITY + ": " + self.quantity + ")"
 
     ### function: toJson ###
 
     def toJson (self):
-        return {"id" : self.id, "name" : self.name, "quantity" : self.quantity}
+        return {
+            MongoProductFields.ID : self.id,
+            MongoProductFields.NAME : self.name,
+            MongoProductFields.QUANTITY : self.quantity
+        }
 
 
 ### function: toProduct ###
@@ -27,6 +35,11 @@ class Product ():
 def toProduct (mongoCursor) :
     products = []
 
-    for product in mongoCursor: products.append (Product (product ['id'], product ['name'], product ['quantity']))
+    for product in mongoCursor:
+        products.append (Product (
+            product [MongoProductFields.ID],
+            product [MongoProductFields.NAME],
+            product [MongoProductFields.QUANTITY]
+        ))
 
     return products

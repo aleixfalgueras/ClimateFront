@@ -1,6 +1,21 @@
-import enum
+################################################################################
+# mongo constants
+################################################################################
 
-class StockId (enum.Enum):
-    TOMATOE = "2"
-    BANANA = "3"
-    APPLE = "4"
+class MongoCollection ():
+    PRODUCT = "product"
+    ROUTE = "route"
+
+class MongoProductFields:
+    ID = "id"
+    NAME = "name"
+    QUANTITY = "quantity"
+
+class MongoRouteFields:
+    ID = "id"
+    STATE = "state"
+    ORIGIN = "origin"
+    DESTINY = "destiny"
+    DEPARTURE = "departure"
+    ARRIVAL = "arrival"
+    PRODUCTS = "products"

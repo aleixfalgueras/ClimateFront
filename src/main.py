@@ -2,6 +2,7 @@ from src import config
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
 from src.opcua_communication.ClientOPCUA import ClientOPCUA
+from src.commons import MongoCollection, MongoRouteFields
 
 import time
 
@@ -10,9 +11,11 @@ import time
 def mongoTest ():
     mongoClient     = MongoClientSingleton ()
     climateFrontDb  = mongoClient.getDatabase (config.mongoDatabase)
-    routeCollection = climateFrontDb.getCollection ("route")
+    routeCollection = climateFrontDb.getCollection (MongoCollection.ROUTE)
 
     testRoute = {
+        'id' : '1',
+        'state' : 'PENDING',
         'origin' : 'London',
         'destiny' : 'Paris',
         'departure' : '20190105',
@@ -31,10 +34,10 @@ def mongoTest ():
     }
     routeCollection.insertOne (testRoute)
 
-    res = routeCollection.find ({"origin" : "London"})
+    res = routeCollection.find ({MongoRouteFields.ORIGIN : "London"})
 
     for r in res:
-        print (r ['origin'] + " - " + r ['destiny'])
+        print (r [MongoRouteFields.ORIGIN] + " - " + r [MongoRouteFields.DESTINY])
 
     mongoClient.close ()
 
@@ -57,9 +60,9 @@ def opcuaTest ():
     print ("Initial stock bananas: "  + str (varBananas.get_value ()))
     print ("Initial stock apples: "   + str (varApples.get_value ()))
 
-    clientStock.subscribeToVarMongo (varTomatoes, climateFrontDb)
-    clientStock.subscribeToVarMongo (varBananas , climateFrontDb)
-    clientStock.subscribeToVarMongo (varApples  , climateFrontDb)
+    clientStock.subscribeVarToMongoCollection (varTomatoes, climateFrontDb, MongoCollection.PRODUCT)
+    clientStock.subscribeVarToMongoCollection (varBananas, climateFrontDb, MongoCollection.PRODUCT)
+    clientStock.subscribeVarToMongoCollection (varApples, climateFrontDb, MongoCollection.PRODUCT)
 
     serverStock.incrementStock ()
 
