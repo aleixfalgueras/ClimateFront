@@ -1,5 +1,6 @@
 from opcua import Server
 from random import randrange
+from src import config
 
 import logging
 
@@ -12,7 +13,7 @@ class ServerOPCUASimulation:
 
     ### function: __init__ ###
 
-    def __init__ (self, config):
+    def __init__ (self):
         try:
             server = Server ()
 

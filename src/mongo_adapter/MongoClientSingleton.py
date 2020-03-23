@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from src.mongo_adapter.MongoDatabaseWrapper import MongoDatabaseWrapper
+from src import config
 
 import logging
 
@@ -18,7 +19,7 @@ class MongoClientSingleton:
 
         ### function: __init__ ###
 
-        def __init__ (self, config) :
+        def __init__ (self) :
             try:
                 self.connection = MongoClient (config.mongoUrl)
 
@@ -50,10 +51,10 @@ class MongoClientSingleton:
 
     ### function: __new__ ###
 
-    def __new__(cls, config):
+    def __new__(cls):
         try :
             if MongoClientSingleton.instance is None :
-                MongoClientSingleton.instance = MongoClientSingleton.__MongoClientSingleton (config)
+                MongoClientSingleton.instance = MongoClientSingleton.__MongoClientSingleton ()
 
             return MongoClientSingleton.instance
 

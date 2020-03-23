@@ -1,16 +1,14 @@
-from src.config import DevelopmentConfig
+from src import config
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
 from src.opcua_communication.ClientOPCUA import ClientOPCUA
-from flask import Flask, jsonify, request
 
 import time
-import logging
 
 ### function: mongoTest ###
 
-def mongoTest (config):
-    mongoClient     = MongoClientSingleton (config)
+def mongoTest ():
+    mongoClient     = MongoClientSingleton ()
     climateFrontDb  = mongoClient.getDatabase (config.mongoDatabase)
     routeCollection = climateFrontDb.getCollection ("route")
 
@@ -42,9 +40,9 @@ def mongoTest (config):
 
 ### function: opcuaTest ###
 
-def opcuaTest (config):
-    climateFrontDb = MongoClientSingleton  (config).getDatabase (config.mongoDatabase)
-    serverStock    = ServerOPCUASimulation (config)
+def opcuaTest ():
+    climateFrontDb = MongoClientSingleton  ().getDatabase (config.mongoDatabase)
+    serverStock    = ServerOPCUASimulation ()
 
     serverStock.startSimulation ()
     serverStock.incrementStock ()
@@ -69,24 +67,15 @@ def opcuaTest (config):
     print ("Final stock bananas: "  + str (varBananas.get_value ()))
     print ("Final stock apples: "   + str (varApples.get_value ()))
 
-### function: apiRestTest ###
-
-def apiRestTest ():
-    app = Flask (__name__)
-    app.run (debug = True, port = 8080)
 
 ########################################################################################################################
 #########################                            CLIMATE FRONT                            ##########################
 ########################################################################################################################
 
 if __name__ == '__main__':
-    config = DevelopmentConfig ()
 
-    logging.basicConfig (level = config.logLevel)
-
-    #mongoTest (config)
-    #opcuaTest (config)
-    apiRestTest ()
+    mongoTest ()
+    opcuaTest ()
 
     while True:
         time.sleep (100000)
