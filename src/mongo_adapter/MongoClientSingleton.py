@@ -1,8 +1,9 @@
-from pymongo import MongoClient
-from src.mongo_adapter.MongoDatabaseWrapper import MongoDatabaseWrapper
-from src import config
-
 import logging
+
+from pymongo import MongoClient
+
+from src import config
+from src.mongo_adapter.MongoDatabaseWrapper import MongoDatabaseWrapper
 
 
 ################################################################################

@@ -1,5 +1,6 @@
-from src.mongo_adapter.MongoCollectionWrapper import MongoCollectionWrapper
 import logging
+
+from src.mongo_adapter.MongoCollectionWrapper import MongoCollectionWrapper
 
 
 ################################################################################

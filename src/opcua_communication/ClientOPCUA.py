@@ -1,7 +1,9 @@
-from opcua import Client
-from src.opcua_communication.SubscriptionHandler import  SubscriptionHandler, SubscriptionMongoCollectionHandler
-
 import logging
+
+from opcua import Client
+
+from src.opcua_communication.SubscriptionHandler import SubscriptionHandler, SubscriptionMongoCollectionHandler
+
 
 ################################################################################
 # class: ClientOPCUA

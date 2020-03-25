@@ -1,8 +1,9 @@
-from opcua import Server
-from random import randrange
-from src import config
-
 import logging
+from random import randrange
+
+from opcua import Server
+
+from src import config
 
 
 ################################################################################

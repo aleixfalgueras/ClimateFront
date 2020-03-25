@@ -1,6 +1,6 @@
-from src.commons import MongoProductFields, MongoCollection
-
 import logging
+
+from src.commons import MongoProductFields, MongoCollection
 
 
 ################################################################################
