@@ -47,7 +47,7 @@ def cancelRoute (route):
 
     routeCollection = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.ROUTE)
 
-    routeCollection.updateOne ({MongoRouteFields.ID : route.id}, {"$set" : {MongoRouteFields.STATE : route.state}})
+    routeCollection.updateOneFieldById (route.id, MongoRouteFields.STATE, route.state)
 
     incrementProductsStock (route.products)
 

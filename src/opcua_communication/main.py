@@ -80,7 +80,7 @@ def opcuaTest ():
 
 if __name__ == '__main__':
 
-    mongoTest ()
+    #mongoTest ()
     opcuaTest ()
 
     while True:

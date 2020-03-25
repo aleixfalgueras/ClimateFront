@@ -41,9 +41,7 @@ class SubscriptionMongoCollectionHandler () :
             if (self.collectionName == MongoCollection.PRODUCT):
                 id = str (node) [26 :-2]  # Node(NumericNodeId(ns=2;i=2))
 
-                self.collection.updateOne (
-                    {MongoProductFields.ID : id}, {"$set" : {MongoProductFields.QUANTITY : str (val)}}
-                )
+                self.collection.updateOneFieldById (id, MongoProductFields.QUANTITY, str(val))
             else :
                 raise Exception ("Unknow collection to subscribe. Collection name: " + self.collectionName)
 

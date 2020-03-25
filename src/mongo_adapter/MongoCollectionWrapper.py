@@ -41,3 +41,9 @@ class MongoCollectionWrapper:
             logging.error ("MongoCollectionWrapper: updateOne: update_one failed for the collection " + self.collection + ", query: " +
                    query + ", newValues: " + newValues)
             logging.error ("[Exception: " + str (exc) +  "]")
+
+    ### function: updateOneFieldById ###
+
+    def updateOneFieldById (self, id, field, newValue):
+        return self.updateOne ({"id": id}, {"$set" : {field : newValue}})
+

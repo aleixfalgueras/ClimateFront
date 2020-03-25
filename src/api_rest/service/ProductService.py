@@ -44,7 +44,8 @@ def decrementProductsStock (products):
         productFind = toProducts (mongoProductsFind)[0]
 
         newQuantity = int (productFind.quantity) - int (product.quantity)
-        productCollection.updateOne ({MongoProductFields.ID : product.id}, {"$set" : {MongoProductFields.QUANTITY : str (newQuantity)}})
+
+        productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
 
 ### function: incrementProductsStock ###
 
@@ -56,4 +57,4 @@ def incrementProductsStock (products):
         productFind = toProducts (mongoProductsFind)[0]
 
         newQuantity = int (productFind.quantity) + int (product.quantity)
-        productCollection.updateOne ({MongoProductFields.ID : product.id}, {"$set" : {MongoProductFields.QUANTITY : str (newQuantity)}})
+        productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
