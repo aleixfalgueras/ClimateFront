@@ -1,6 +1,7 @@
+import logging
+
 from opcua import ua
 
-import logging
 
 ################################################################################
 # class: Config
@@ -22,3 +23,6 @@ class DevelopmentConfig (Config):
     serverOPCUASimulationEndpoint       = "opc.tcp://localhost:4840/stock"
     serverOPCUASimulationSecurityIds    = "Anonymous"
     serverOPCUASimulationSecurityPolicy = ua.SecurityPolicyType.NoSecurity
+
+    # API REST Config
+    apiRestPort = 8080

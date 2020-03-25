@@ -1,10 +1,11 @@
-from src import config
-from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
-from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
-from src.opcua_communication.ClientOPCUA import ClientOPCUA
-from src.commons import MongoCollection, MongoRouteFields
-
 import time
+
+from src import config
+from src.commons import MongoCollection, MongoRouteFields, MongoProductFields
+from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
+from src.opcua_communication.ClientOPCUA import ClientOPCUA
+from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
+
 
 ### function: mongoTest ###
 
@@ -14,21 +15,23 @@ def mongoTest ():
     routeCollection = climateFrontDb.getCollection (MongoCollection.ROUTE)
 
     testRoute = {
-        'id' : '1',
-        'state' : 'PENDING',
-        'origin' : 'London',
-        'destiny' : 'Paris',
-        'departure' : '20190105',
-        'arrival' : '2019010',
-        'products' :
+        MongoRouteFields.ID : '1',
+        MongoRouteFields.STATE : 'PENDING',
+        MongoRouteFields.ORIGIN : 'London',
+        MongoRouteFields.DESTINY : 'Paris',
+        MongoRouteFields.DEPARTURE : '20190105',
+        MongoRouteFields.ARRIVAL : '2019010',
+        MongoRouteFields.PRODUCTS :
         [
             {
-                'name' : 'tomatoe',
-                'quantity' : '5'
+                MongoProductFields.ID : '2',
+                MongoProductFields.NAME : 'tomatoe',
+                MongoProductFields.QUANTITY : '5'
             },
             {
-                'name' : 'banana',
-                'quantity' : '50'
+                MongoProductFields.ID : '3',
+                MongoProductFields.NAME : 'banana',
+                MongoProductFields.QUANTITY : '50'
             }
         ]
     }

@@ -28,18 +28,3 @@ class Product ():
             MongoProductFields.NAME : self.name,
             MongoProductFields.QUANTITY : self.quantity
         }
-
-
-### function: toProduct ###
-
-def toProduct (mongoCursor) :
-    products = []
-
-    for product in mongoCursor:
-        products.append (Product (
-            product [MongoProductFields.ID],
-            product [MongoProductFields.NAME],
-            product [MongoProductFields.QUANTITY]
-        ))
-
-    return products
