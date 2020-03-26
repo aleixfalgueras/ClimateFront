@@ -4,18 +4,18 @@ from src.commons import MongoCollection, MongoProductFields
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 
 
-### function: getProduct ###
-
-def getProduct (productId) :
-    query = {MongoProductFields.ID : productId}
-    res = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT).find (query)
-
-    return toProducts (res)
-
 ### function: getProducts ###
 
 def getProducts ():
     res = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT).find ({})
+
+    return toProducts (res)
+
+### function: getProductByField ###
+
+def getProductByField (productField, value):
+    query = {productField : value}
+    res = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT).find (query)
 
     return toProducts (res)
 

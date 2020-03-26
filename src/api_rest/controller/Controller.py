@@ -1,10 +1,15 @@
 from flask import Flask, jsonify, request
 
-from src.api_rest.service.ProductService import getProducts, getProduct, checkProductsStock
+from src.api_rest.service.ProductService import getProducts, getProductByField, checkProductsStock
 from src.api_rest.service.RouteService import getRoutes, getRoute, addRoute, checkCancelRoute, cancelRoute
 from src.api_rest.utils import toJsonArray, toProducts
-from src.commons import MongoRouteFields, RouteState
+from src.commons import MongoRouteFields, RouteState, MongoProductFields
 from src.config import DevelopmentConfig
+
+
+################################################################################
+# app
+################################################################################
 
 app = Flask (__name__)
 
@@ -35,16 +40,26 @@ def handle_bad_request (error):
 
 @app.route ('/products')
 def get_products ():
-    return jsonify (toJsonArray (getProducts ()))
+    args = request.args
 
-### GET: get_product
+    if len (args) == 0:
+        return jsonify (toJsonArray (getProducts ()))
+    elif MongoProductFields.NAME in args and len (args) == 1:
+        return jsonify (toJsonArray (getProductByField (MongoProductFields.NAME, args [MongoProductFields.NAME])))
+    else:
+        raise BadRequest ("Incorrect query, only can filter by the field: " + MongoProductFields.NAME, 400001)
+
+
+### GET: get_product_by_id
 
 @app.route ('/products/<string:product_id>')
-def get_product (product_id):
-    product = getProduct (product_id)
+def get_product_by_id (product_id):
+    product = getProductByField (MongoProductFields.ID, product_id)
 
-    if  len (product) == 0 : raise BadRequest ("Product with id: " + product_id + " not found", 400001)
+    if  len (product) == 0 : raise BadRequest ("Product with " + MongoProductFields.ID + ": " +
+                                               product_id + " not found", 400002)
     else                   : return jsonify (product[0].toJson ())
+
 
 ################################################################################
 # Route
