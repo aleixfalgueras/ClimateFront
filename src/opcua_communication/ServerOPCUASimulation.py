@@ -1,7 +1,9 @@
-from opcua import Server
+import logging
 from random import randrange
 
-import logging
+from opcua import Server
+
+from src import config
 
 
 ################################################################################
@@ -12,7 +14,7 @@ class ServerOPCUASimulation:
 
     ### function: __init__ ###
 
-    def __init__ (self, config):
+    def __init__ (self):
         try:
             server = Server ()
 
@@ -27,6 +29,7 @@ class ServerOPCUASimulation:
         except Exception as exc:
             logging.error ("ServerOPCUASimulation: __init__: Error initializing 'ServerOPCUASimulation'")
             logging.error ("[Exception: " + str (exc) +  "]")
+
 
     ### function: addStock ###
 
@@ -55,6 +58,7 @@ class ServerOPCUASimulation:
             logging.error ("ServerOPCUASimulation: addStock: Error adding stock to the OPCUA Server Simulation")
             logging.error ("[Exception: " + str (exc) + "]")
 
+
     ### function: startSimulation ###
 
     def startSimulation (self):
@@ -74,6 +78,7 @@ class ServerOPCUASimulation:
         except Exception as exc :
             logging.error ("ServerOPCUASimulation: startSimulation: Error starting simulation")
             logging.error ("[Exception: " + str (exc) + "]")
+
 
     ### function: incrementStock ###
 

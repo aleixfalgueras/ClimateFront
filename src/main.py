@@ -1,49 +1,63 @@
-from src.config import DevelopmentConfig
-from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
-from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
-from src.opcua_communication.ClientOPCUA import ClientOPCUA
-
 import time
-import logging
+
+from src import config
+from src.commons import MongoCollection, MongoRouteFields, MongoProductFields, RouteState
+from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
+from src.opcua_communication.ClientOPCUA import ClientOPCUA
+from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
+
 
 ### function: mongoTest ###
 
-def mongoTest (config):
-    mongoClient     = MongoClientSingleton (config)
+def mongoTest ():
+    mongoClient     = MongoClientSingleton ()
     climateFrontDb  = mongoClient.getDatabase (config.mongoDatabase)
-    routeCollection = climateFrontDb.getCollection ("route")
+    routeCollection = mongoClient.getCollection (MongoCollection.ROUTE)
 
     testRoute = {
-        'origin' : 'London',
-        'destiny' : 'Paris',
-        'departure' : '20190105',
-        'arrival' : '2019010',
-        'products' :
+        MongoRouteFields.ID : '1',
+        MongoRouteFields.STATE : 'PENDING',
+        MongoRouteFields.ORIGIN : 'TEST1',
+        MongoRouteFields.DESTINY : 'TEST2',
+        MongoRouteFields.DEPARTURE : '20190105',
+        MongoRouteFields.ARRIVAL : '2019010',
+        MongoRouteFields.PRODUCTS :
         [
             {
-                'name' : 'tomatoe',
-                'quantity' : '5'
+                MongoProductFields.ID : '2',
+                MongoProductFields.NAME : 'tomatoe',
+                MongoProductFields.QUANTITY : '5'
             },
             {
-                'name' : 'banana',
-                'quantity' : '50'
+                MongoProductFields.ID : '3',
+                MongoProductFields.NAME : 'banana',
+                MongoProductFields.QUANTITY : '50'
             }
         ]
     }
-    routeCollection.insertOne (testRoute)
 
-    res = routeCollection.find ({"origin" : "London"})
+    routeCollection.insertOne (testRoute)
+    routeCollection.updateOneFieldById ('1', MongoRouteFields.STATE, RouteState.CANCELED)
+
+    res = routeCollection.find ({MongoRouteFields.ORIGIN : "TEST1"})
 
     for r in res:
-        print (r ['origin'] + " - " + r ['destiny'])
+        originDestiny = "TEST1 - TEST2"
+        originDestinyMongo = r [MongoRouteFields.ORIGIN] + " - " + r [MongoRouteFields.DESTINY]
+
+        if (originDestinyMongo == originDestiny): print ("Find OK")
+        if (r [MongoRouteFields.STATE] == RouteState.CANCELED): print ("Update OK")
+
+
 
     mongoClient.close ()
 
+
 ### function: opcuaTest ###
 
-def opcuaTest (config):
-    climateFrontDb = MongoClientSingleton  (config).getDatabase (config.mongoDatabase)
-    serverStock    = ServerOPCUASimulation (config)
+def opcuaTest ():
+    climateFrontDb = MongoClientSingleton  ().getDatabase (config.mongoDatabase)
+    serverStock    = ServerOPCUASimulation ()
 
     serverStock.startSimulation ()
     serverStock.incrementStock ()
@@ -58,9 +72,9 @@ def opcuaTest (config):
     print ("Initial stock bananas: "  + str (varBananas.get_value ()))
     print ("Initial stock apples: "   + str (varApples.get_value ()))
 
-    clientStock.subscribeToVarMongo (varTomatoes, climateFrontDb)
-    clientStock.subscribeToVarMongo (varBananas , climateFrontDb)
-    clientStock.subscribeToVarMongo (varApples  , climateFrontDb)
+    clientStock.subscribeVarToMongoCollection (varTomatoes, climateFrontDb, MongoCollection.PRODUCT)
+    clientStock.subscribeVarToMongoCollection (varBananas, climateFrontDb, MongoCollection.PRODUCT)
+    clientStock.subscribeVarToMongoCollection (varApples, climateFrontDb, MongoCollection.PRODUCT)
 
     serverStock.incrementStock ()
 
@@ -68,17 +82,15 @@ def opcuaTest (config):
     print ("Final stock bananas: "  + str (varBananas.get_value ()))
     print ("Final stock apples: "   + str (varApples.get_value ()))
 
+
 ########################################################################################################################
 #########################                            CLIMATE FRONT                            ##########################
 ########################################################################################################################
 
 if __name__ == '__main__':
-    config = DevelopmentConfig ()
 
-    logging.basicConfig (level = config.logLevel)
-
-    mongoTest (config)
-    opcuaTest (config)
+    mongoTest ()
+    opcuaTest ()
 
     while True:
         time.sleep (100000)
