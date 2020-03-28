@@ -23,6 +23,7 @@ class ClientOPCUA:
             logging.error ("ClientOPCUA: __init__: Error initializing class. URL Server: " + urlServer)
             logging.error ("[Exception: " + str (exc) + "]")
 
+
     ### function: getObjectsVar ###
 
     def getObjectsVar (self, objectName, varName):
@@ -32,6 +33,7 @@ class ClientOPCUA:
         except Exception as exc:
             logging.error ("ClientOPCUA: getObjectsVar: Error getting variable " + varName + " from " + objectName + " in node '0:Objects'")
             logging.error ("[Exception: " + str (exc) +  "]")
+
 
     ### function: subscribeToVar ###
 
@@ -44,6 +46,7 @@ class ClientOPCUA:
         except Exception as exc:
             logging.error ("ClientOPCUA: subscribeToVar: Subscription failed for the var:  " + str(var))
             logging.error ("[Exception: " + str (exc) +  "]")
+
 
     ### function: subscribeVarToMongoCollection ###
 

@@ -34,6 +34,7 @@ class SubscriptionMongoCollectionHandler () :
                            "Mongo database: " + mongoDatabase + ", collection: " + collection)
             logging.error ("[Exception: " + str (exc) + "]")
 
+
     ### function: datachange_notification ###
 
     def datachange_notification (self, node, val, data) :

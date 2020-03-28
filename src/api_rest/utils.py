@@ -1,44 +1,64 @@
-from src.api_rest.model.Product import Product
-from src.api_rest.model.Route import Route
+import logging
+
+from src.api_rest.model.EntityProduct import Product
+from src.api_rest.model.EntityRoute import Route
 from src.commons import MongoProductFields, MongoRouteFields
+
 
 ### function: toJsonArray ###
 
 def toJsonArray (entityList):
-    jsonArray = []
+    try :
+        jsonArray = []
 
-    for entity in entityList: jsonArray.append (entity.toJson ())
+        for entity in entityList : jsonArray.append (entity.toJson ())
 
-    return jsonArray
+        return jsonArray
+
+    except Exception as exc :
+        logging.error ("utils: toJsonArray: Error getting a JSON array for the entity '" + entityList [0].entityName)
+        logging.error ("[Exception: " + str (exc) + "]")
+
 
 ### function: toProducts ###
 
 def toProducts (mongoCursor) :
-    products = []
+    try :
+        products = []
 
-    for product in mongoCursor:
-        products.append (Product (
-            product [MongoProductFields.ID],
-            product [MongoProductFields.NAME],
-            product [MongoProductFields.QUANTITY]
-        ))
+        for product in mongoCursor :
+            products.append (Product (
+                product [MongoProductFields.ID],
+                product [MongoProductFields.NAME],
+                product [MongoProductFields.QUANTITY]
+            ))
 
-    return products
+        return products
+
+    except Exception as exc :
+        logging.error ("utils: toProducts: Error parsing products from mongo to EntityProducts")
+        logging.error ("[Exception: " + str (exc) + "]")
+
 
 ### function: toRoute ###
 
 def toRoutes (mongoCursor):
-    routes = []
+    try:
+        routes = []
 
-    for route in mongoCursor:
-        routes.append (Route (
-            route [MongoRouteFields.ORIGIN],
-            route [MongoRouteFields.DESTINY],
-            route [MongoRouteFields.DEPARTURE],
-            route [MongoRouteFields.ARRIVAL],
-            toProducts (route [MongoRouteFields.PRODUCTS]),
-            route [MongoRouteFields.ID],
-            route [MongoRouteFields.STATE]
-        ))
+        for route in mongoCursor :
+            routes.append (Route (
+                route [MongoRouteFields.ORIGIN],
+                route [MongoRouteFields.DESTINY],
+                route [MongoRouteFields.DEPARTURE],
+                route [MongoRouteFields.ARRIVAL],
+                toProducts (route [MongoRouteFields.PRODUCTS]),
+                route [MongoRouteFields.ID],
+                route [MongoRouteFields.STATE]
+            ))
 
-    return routes
+        return routes
+
+    except Exception as exc:
+        logging.error ("utils: toRoutes: Error parsing routes from mongo to EntityRoute")
+        logging.error ("[Exception: " + str (exc) + "]")

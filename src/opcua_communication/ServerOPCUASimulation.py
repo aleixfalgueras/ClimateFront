@@ -30,6 +30,7 @@ class ServerOPCUASimulation:
             logging.error ("ServerOPCUASimulation: __init__: Error initializing 'ServerOPCUASimulation'")
             logging.error ("[Exception: " + str (exc) +  "]")
 
+
     ### function: addStock ###
 
     def addStock (self, stock, namespaceIndex):
@@ -57,6 +58,7 @@ class ServerOPCUASimulation:
             logging.error ("ServerOPCUASimulation: addStock: Error adding stock to the OPCUA Server Simulation")
             logging.error ("[Exception: " + str (exc) + "]")
 
+
     ### function: startSimulation ###
 
     def startSimulation (self):
@@ -76,6 +78,7 @@ class ServerOPCUASimulation:
         except Exception as exc :
             logging.error ("ServerOPCUASimulation: startSimulation: Error starting simulation")
             logging.error ("[Exception: " + str (exc) + "]")
+
 
     ### function: incrementStock ###
 

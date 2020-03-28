@@ -1,10 +1,14 @@
 from src.commons import MongoProductFields
 
+
 ################################################################################
 # class: Product
 ################################################################################
 
 class Product ():
+
+    entityName = "Product"
+
 
     ### function: __init__ ###
 
@@ -13,12 +17,14 @@ class Product ():
         self.name = name
         self.quantity = quantity
 
+
     ### function: __str__ ###
 
     def __str__ (self) :
         return "Product (" + MongoProductFields.ID + ": " + self.id + ", " + \
                MongoProductFields.NAME + ": " + self.name + ", " + \
                MongoProductFields.QUANTITY + ": " + self.quantity + ")"
+
 
     ### function: toJson ###
 

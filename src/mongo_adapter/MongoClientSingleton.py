@@ -28,15 +28,23 @@ class MongoClientSingleton:
                 logging.error ("__MongoClientSingleton: __init__: Error connecting to " + config.mongoUrl)
                 logging.error ("[Exception: " + str (exc) +  "]")
 
+
         ### function: getDatabase ###
 
-        def getDatabase (self, database) :
+        def getDatabase (self, databaseName) :
             try:
-                return MongoDatabaseWrapper (self.connection.get_database (database))
+                return MongoDatabaseWrapper (self.connection.get_database (databaseName))
 
             except Exception as exc:
-                logging.error ("__MongoClientSingleton: getDatabase: Error getting database: '" + database + "'")
+                logging.error ("__MongoClientSingleton: getDatabase: Error getting database: '" + databaseName + "'")
                 logging.error ("[Exception: " + str (exc) +  "]")
+
+
+        ### function: getCollection ###
+
+        def getCollection (self, collectionName, databaseName = config.mongoDatabase):
+            return self.getDatabase (databaseName).getCollection (collectionName)
+
 
         ### function: close ###
 
@@ -48,7 +56,9 @@ class MongoClientSingleton:
                 logging.error ("__MongoClientSingleton: Error closing connection")
                 logging.error ("[Exception: " + str (exc) +  "]")
 
+
     instance = None
+
 
     ### function: __new__ ###
 

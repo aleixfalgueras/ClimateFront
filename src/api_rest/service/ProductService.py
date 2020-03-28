@@ -1,4 +1,6 @@
-from src import config
+from src.api_rest.utils import toProducts
+import logging
+
 from src.api_rest.utils import toProducts
 from src.commons import MongoCollection, MongoProductFields
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
@@ -6,55 +8,73 @@ from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 
 ### function: getProducts ###
 
-def getProducts ():
-    res = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT).find ({})
+def getProducts (fields = None) :
+    try :
+        query = {}
+        if fields is not None : query = fields
 
-    return toProducts (res)
+        res = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT).find (query)
 
-### function: getProductByField ###
+        return toProducts (res)
 
-def getProductByField (productField, value):
-    query = {productField : value}
-    res = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT).find (query)
+    except Exception as exc :
+        logging.error ("ProductService: getProducts: Error getting products, fields: " + str (fields))
+        logging.error ("[Exception: " + str (exc) + "]")
 
-    return toProducts (res)
 
 ### function: checkProductStock ###
 
 def checkProductsStock (products):
-    productCollection = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT)
+    try :
+        productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 
-    for product in products:
-        mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
+        for product in products :
+            mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
 
-        productsFind = toProducts (mongoProductsFind)
+            productsFind = toProducts (mongoProductsFind)
 
-        if len (productsFind) == 0: return (False, product, 0) # product doesn't exist
-        if int (product.quantity) > int (productsFind[0].quantity): return (False, product, 1) # no stock for the product
+            if len (productsFind) == 0: return (False, product, 0)  # product doesn't exist
+            if int (product.quantity) > int (productsFind [0].quantity): return (False, product, 1)  # no stock for the product
 
-    return (True, None, None)
+        return (True, None, None)
+
+    except Exception as exc :
+        logging.error ("ProductService: checkProductsStock: Error checking products: " + products)
+        logging.error ("[Exception: " + str (exc) + "]")
+
 
 ### function: decrementProductStock ###
 
 def decrementProductsStock (products):
-    productCollection = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT)
+    try :
+        productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 
-    for product in products:
-        mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
-        productFind = toProducts (mongoProductsFind)[0]
+        for product in products :
+            mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
+            productFind = toProducts (mongoProductsFind) [0]
 
-        newQuantity = int (productFind.quantity) - int (product.quantity)
+            newQuantity = int (productFind.quantity) - int (product.quantity)
 
-        productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
+            productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
+
+    except Exception as exc :
+        logging.error ("ProductService: decrementProductsStock: Error decrementing products: " + products)
+        logging.error ("[Exception: " + str (exc) + "]")
+
 
 ### function: incrementProductsStock ###
 
 def incrementProductsStock (products):
-    productCollection = MongoClientSingleton ().getDatabase (config.mongoDatabase).getCollection (MongoCollection.PRODUCT)
+    try :
+        productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 
-    for product in products:
-        mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
-        productFind = toProducts (mongoProductsFind)[0]
+        for product in products :
+            mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
+            productFind = toProducts (mongoProductsFind) [0]
 
-        newQuantity = int (productFind.quantity) + int (product.quantity)
-        productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
+            newQuantity = int (productFind.quantity) + int (product.quantity)
+            productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
+
+    except Exception as exc :
+        logging.error ("ProductService: incrementProductsStock: Error incrementing products: " + products)
+        logging.error ("[Exception: " + str (exc) + "]")

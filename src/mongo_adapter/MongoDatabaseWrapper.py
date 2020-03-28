@@ -12,14 +12,21 @@ class MongoDatabaseWrapper:
     ### function: __init__ ###
 
     def __init__ (self, database):
-        self.database = database
+        try:
+            self.database = database
+
+        except Exception as exc :
+            logging.error ("MongoDatabaseWrapper: __init__: Error initializing class. Database: " + str (database))
+            logging.error ("[Exception: " + str (exc) + "]")
+
 
     ### function: getCollection ###
 
-    def getCollection (self, collection):
+    def getCollection (self, collectionName):
         try:
-            return MongoCollectionWrapper (self.database.get_collection (collection))
+            return MongoCollectionWrapper (self.database.get_collection (collectionName), collectionName)
 
         except Exception as exc:
-            logging.error ("MongoDatabaseWrapper: getCollection: Error getting collection: '" + collection + "' in database: " + self.database)
+            logging.error ("MongoDatabaseWrapper: getCollection: Error getting collection: '" + collectionName + \
+                           "' in database: " + str (self.database))
             logging.error ("[Exception: " + str (exc) +  "]")

@@ -9,6 +9,9 @@ from src.commons import MongoRouteFields, RouteState
 
 class Route:
 
+    entityName = "Route"
+
+
     ### function: __init__ ###
 
     def __init__ (self, origin, destiny, departure, arrival, products, id = None, state = RouteState.PENDING):
@@ -23,6 +26,7 @@ class Route:
         self.departure = departure
         self.arrival = arrival
         self.products = products
+
 
     ### function: __str__ ###
 
@@ -42,6 +46,7 @@ class Route:
                MongoRouteFields.DEPARTURE + ": " + self.departure + ", " + \
                MongoRouteFields.ARRIVAL + ": " + self.arrival + ", " + \
                MongoRouteFields.PRODUCTS + ": " + productsString + ")"
+
 
     ### function: toJson ###
 
