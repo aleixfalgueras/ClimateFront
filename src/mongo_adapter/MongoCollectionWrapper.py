@@ -5,11 +5,11 @@ import logging
 # class: MongoCollectionWrapper
 ################################################################################
 
-class MongoCollectionWrapper:
+class MongoCollectionWrapper :
 
     ### function: __init__ ###
 
-    def __init__ (self, collection, collectionName):
+    def __init__ (self, collection, collectionName) :
         try :
             self.collection = collection
             self.collectionName = collectionName
@@ -21,11 +21,11 @@ class MongoCollectionWrapper:
 
     ### function: insert ###
 
-    def insertOne (self, query):
-        try:
+    def insertOne (self, query) :
+        try :
             self.collection.insert_one (query)
 
-        except Exception as exc:
+        except Exception as exc :
             logging.error ("MongoCollectionWrapper: insertOne: insert_one failed for the collection '" + \
                            self.collectionName + "', query: " + str (query))
             logging.error ("[Exception: " + str (exc) +  "]")
@@ -33,22 +33,22 @@ class MongoCollectionWrapper:
 
     ### function: find ###
 
-    def find (self, query):
-        try:
+    def find (self, query) :
+        try :
             return self.collection.find (query)
 
-        except Exception as exc:
+        except Exception as exc :
             logging.error ("MongoCollectionWrapper: find: Find failed for the collection '" + self.collectionName + "', query: " + str (query))
             logging.error ("[Exception: " + str (exc) +  "]")
 
 
     ### function: updateOne ###
 
-    def updateOne (self, query, newValues):
-        try:
-            return self.collection.update_one (query, newValues)
+    def updateOne (self, query, newValues) :
+        try :
+            self.collection.update_one (query, newValues)
 
-        except Exception as exc:
+        except Exception as exc :
             logging.error ("MongoCollectionWrapper: updateOne: update_one failed for the collection '" + self.collectionName + "', query: " +
                    str (query) + ", newValues: " + str (newValues))
             logging.error ("[Exception: " + str (exc) +  "]")
@@ -56,6 +56,6 @@ class MongoCollectionWrapper:
 
     ### function: updateOneFieldById ###
 
-    def updateOneFieldById (self, id, field, newValue):
-        return self.updateOne ({"id": id}, {"$set" : {field : newValue}})
+    def updateOneFieldById (self, id, field, newValue) :
+        self.updateOne ({"id": id}, {"$set" : {field : newValue}})
 
