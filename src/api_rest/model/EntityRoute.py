@@ -7,15 +7,15 @@ from src.commons import MongoRouteFields, RouteState
 # class: Route
 ################################################################################
 
-class Route:
+class Route :
 
     entityName = "Route"
 
 
     ### function: __init__ ###
 
-    def __init__ (self, origin, destiny, departure, arrival, products, id = None, state = RouteState.PENDING):
-        if id is None:
+    def __init__ (self, origin, destiny, departure, arrival, products, id = None, state = RouteState.PENDING) :
+        if id is None :
             self.id = str (time.time_ns ())
         else:
             self.id = id
@@ -30,7 +30,7 @@ class Route:
 
     ### function: __str__ ###
 
-    def __str__ (self):
+    def __str__ (self) :
         productsString = "\n"
         lastPosition = len (self.products) - 1
 
@@ -50,7 +50,7 @@ class Route:
 
     ### function: toJson ###
 
-    def toJson (self):
+    def toJson (self) :
         products = []
 
         for product in self.products: products.append (product.toJson ())
