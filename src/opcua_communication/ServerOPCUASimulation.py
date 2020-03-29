@@ -10,12 +10,12 @@ from src import config
 # class: ServerOPCUASimulation
 ################################################################################
 
-class ServerOPCUASimulation:
+class ServerOPCUASimulation :
 
     ### function: __init__ ###
 
-    def __init__ (self):
-        try:
+    def __init__ (self) :
+        try :
             server = Server ()
 
             server.set_endpoint (config.serverOPCUASimulationEndpoint)
@@ -25,15 +25,37 @@ class ServerOPCUASimulation:
 
             self.server = server
             self.config = config
+            self.stockItems = []
 
         except Exception as exc:
             logging.error ("ServerOPCUASimulation: __init__: Error initializing 'ServerOPCUASimulation'")
             logging.error ("[Exception: " + str (exc) +  "]")
 
 
-    ### function: addStock ###
+    ### function: startSimulation ###
 
-    def addStock (self, stock, namespaceIndex):
+    def startSimulation (self) :
+        try :
+            namespaceIndex = self.server.register_namespace ("http://climateFront.tfg.fib.upc")
+
+            objectsNode = self.server.get_objects_node ()
+
+            stock = objectsNode.add_object (namespaceIndex, "Stock")
+
+            stockItems = self.getStock (stock, namespaceIndex)
+
+            self.stockItems = stockItems
+
+            self.server.start ()
+
+        except Exception as exc :
+            logging.error ("ServerOPCUASimulation: startSimulation: Error starting simulation")
+            logging.error ("[Exception: " + str (exc) + "]")
+
+
+    ### function: getStock ###
+
+    def getStock (self, stock, namespaceIndex) :
         try :
             stockItems = []
 
@@ -59,30 +81,9 @@ class ServerOPCUASimulation:
             logging.error ("[Exception: " + str (exc) + "]")
 
 
-    ### function: startSimulation ###
-
-    def startSimulation (self):
-        try :
-            namespaceIndex = self.server.register_namespace ("http://climateFront.tfg.fib.upc")
-
-            objectsNode = self.server.get_objects_node ()
-
-            stock = objectsNode.add_object (namespaceIndex, "Stock")
-
-            stockItems = self.addStock (stock, namespaceIndex)
-
-            self.stockItems = stockItems
-
-            self.server.start ()
-
-        except Exception as exc :
-            logging.error ("ServerOPCUASimulation: startSimulation: Error starting simulation")
-            logging.error ("[Exception: " + str (exc) + "]")
-
-
     ### function: incrementStock ###
 
-    def incrementStock(self):
+    def incrementStock(self) :
         try :
             for item in self.stockItems :
                 quantity = randrange (10)
