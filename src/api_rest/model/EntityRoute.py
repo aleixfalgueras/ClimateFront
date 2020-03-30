@@ -9,7 +9,7 @@ from src.commons import MongoRouteFields, RouteState
 
 class Route :
 
-    entityName = "Route"
+    ENTITY_NAME = "Route"
 
 
     ### function: __init__ ###

@@ -16,7 +16,7 @@ def toJsonArray (entityList):
         return jsonArray
 
     except Exception as exc :
-        logging.error ("utils: toJsonArray: Error getting a JSON array for the entity '" + entityList [0].entityName)
+        logging.error ("utils: toJsonArray: Error getting a JSON array for the entity '" + entityList [0].ENTITY_NAME)
         logging.error ("[Exception: " + str (exc) + "]")
 
 
@@ -36,7 +36,7 @@ def toProducts (mongoCursor) :
         return products
 
     except Exception as exc :
-        logging.error ("utils: toProducts: Error parsing products from mongo to EntityProducts")
+        logging.error ("utils: toProducts: Error parsing products from mongo to " + Product.ENTITY_NAME)
         logging.error ("[Exception: " + str (exc) + "]")
 
 
@@ -60,5 +60,5 @@ def toRoutes (mongoCursor):
         return routes
 
     except Exception as exc:
-        logging.error ("utils: toRoutes: Error parsing routes from mongo to EntityRoute")
+        logging.error ("utils: toRoutes: Error parsing routes from mongo to " + Route.ENTITY_NAME)
         logging.error ("[Exception: " + str (exc) + "]")

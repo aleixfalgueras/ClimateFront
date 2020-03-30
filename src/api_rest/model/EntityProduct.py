@@ -5,14 +5,14 @@ from src.commons import MongoProductFields
 # class: Product
 ################################################################################
 
-class Product ():
+class Product () :
 
-    entityName = "Product"
+    ENTITY_NAME = "Product"
 
 
     ### function: __init__ ###
 
-    def __init__ (self, id, name, quantity):
+    def __init__ (self, id, name, quantity) :
         self.id = id
         self.name = name
         self.quantity = quantity
@@ -28,7 +28,7 @@ class Product ():
 
     ### function: toJson ###
 
-    def toJson (self):
+    def toJson (self) :
         return {
             MongoProductFields.ID : self.id,
             MongoProductFields.NAME : self.name,
