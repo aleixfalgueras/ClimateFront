@@ -23,15 +23,12 @@ class SubscriptionMongoCollectionHandler () :
 
     ### function: __init__ ###
 
-    def __init__ (self, mongoDatabase, collection) :
-        try:
-            self.mongoDatabase  = mongoDatabase
-            self.collectionName = collection
-            self.collection     = self.mongoDatabase.getCollection (collection)
+    def __init__ (self, collectionWrapper) :
+        try :
+            self.collectionWrapper = collectionWrapper
 
         except Exception as exc :
-            logging.error ("SubscriptionMongoCollectionHandler: __init__: Error initializing class. "
-                           "Mongo database: " + mongoDatabase + ", collection: " + collection)
+            logging.error ("SubscriptionMongoCollectionHandler: __init__: Error initializing class, collection '" + collectionWrapper.collectionName)
             logging.error ("[Exception: " + str (exc) + "]")
 
 
@@ -39,14 +36,14 @@ class SubscriptionMongoCollectionHandler () :
 
     def datachange_notification (self, node, val, data) :
         try:
-            if (self.collectionName == MongoCollection.PRODUCT):
+            if (self.collectionWrapper.collectionName == MongoCollection.PRODUCT):
                 id = str (node) [26 :-2]  # Node(NumericNodeId(ns=2;i=2))
 
-                self.collection.updateOneFieldById (id, MongoProductFields.QUANTITY, str(val))
+                self.collectionWrapper.updateOneFieldById (id, MongoProductFields.QUANTITY, str (val))
             else :
-                raise Exception ("Unknow collection to subscribe. Collection name: " + self.collectionName)
+                raise Exception ("Unknow collection to subscribe. Collection name: " + self.collectionWrapper.collectionName)
 
-        except Exception as exc:
+        except Exception as exc :
             logging.error ("SubscriptionMongoCollectionHandler: datachange_notification: "
-                           "Coudn't apply the logic for the collection: " + self.collectionName)
+                           "Coudn't apply the logic for the collection '" + self.collectionWrapper.collectionName +"'")
             logging.error ("[Exception: " + str (exc) + "]")

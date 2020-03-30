@@ -56,8 +56,7 @@ def mongoTest ():
 ### function: opcuaTest ###
 
 def opcuaTest ():
-    climateFrontDb = MongoClientSingleton  ().getDatabase (config.mongoDatabase)
-    serverStock    = ServerOPCUASimulation ()
+    serverStock = ServerOPCUASimulation ()
 
     serverStock.startSimulation ()
     serverStock.incrementStock ()
@@ -72,11 +71,23 @@ def opcuaTest ():
     print ("Initial stock bananas: "  + str (varBananas.get_value ()))
     print ("Initial stock apples: "   + str (varApples.get_value ()))
 
-    clientStock.subscribeVarToMongoCollection (varTomatoes, climateFrontDb, MongoCollection.PRODUCT)
-    clientStock.subscribeVarToMongoCollection (varBananas, climateFrontDb, MongoCollection.PRODUCT)
-    clientStock.subscribeVarToMongoCollection (varApples, climateFrontDb, MongoCollection.PRODUCT)
+    productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
+
+    clientStock.subscribeVarToMongoCollection (varTomatoes, productCollection)
+    clientStock.subscribeVarToMongoCollection (varBananas, productCollection)
+    clientStock.subscribeVarToMongoCollection (varApples, productCollection)
 
     serverStock.incrementStock ()
+
+    print ("After first increment")
+
+    print ("Initial stock tomatoes: " + str (varTomatoes.get_value ()))
+    print ("Initial stock bananas: "  + str (varBananas.get_value ()))
+    print ("Initial stock apples: "   + str (varApples.get_value ()))
+
+    serverStock.incrementStock ()
+
+    print ("After second increment")
 
     print ("Final stock tomatoes: " + str (varTomatoes.get_value ()))
     print ("Final stock bananas: "  + str (varBananas.get_value ()))
@@ -89,7 +100,7 @@ def opcuaTest ():
 
 if __name__ == '__main__':
 
-    mongoTest ()
+    #mongoTest ()
     opcuaTest ()
 
     while True:
