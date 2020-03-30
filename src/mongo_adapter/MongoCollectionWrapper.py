@@ -21,13 +21,13 @@ class MongoCollectionWrapper :
 
     ### function: insert ###
 
-    def insertOne (self, query) :
+    def insertOne (self, jsonDocument) :
         try :
-            self.collection.insert_one (query)
+            self.collection.insert_one (jsonDocument)
 
         except Exception as exc :
             logging.error ("MongoCollectionWrapper: insertOne: insert_one failed for the collection '" + \
-                           self.collectionName + "', query: " + str (query))
+                           self.collectionName + "', query: " + str (jsonDocument))
             logging.error ("[Exception: " + str (exc) +  "]")
 
 

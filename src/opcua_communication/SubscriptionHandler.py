@@ -12,7 +12,7 @@ class SubscriptionHandler () :
     ### function: datachange_notification ###
 
     def datachange_notification (self, node, val, data) :
-        print ("New stock for node:", node, "value:", val, "data:", data)
+        print ("Node:", node, "Value:", val, "Data:", data)
 
 
 ################################################################################

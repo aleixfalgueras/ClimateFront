@@ -10,21 +10,21 @@ from src.mongo_adapter.MongoDatabaseWrapper import MongoDatabaseWrapper
 # class: MongoClientSingleton
 ################################################################################
 
-class MongoClientSingleton:
+class MongoClientSingleton :
 
     ################################################################################
     # class: __MongoClientSingleton
     ################################################################################
 
-    class __MongoClientSingleton:
+    class __MongoClientSingleton :
 
         ### function: __init__ ###
 
         def __init__ (self) :
-            try:
+            try :
                 self.connection = MongoClient (config.mongoUrl)
 
-            except Exception as exc:
+            except Exception as exc :
                 logging.error ("__MongoClientSingleton: __init__: Error connecting to " + config.mongoUrl)
                 logging.error ("[Exception: " + str (exc) +  "]")
 
@@ -35,20 +35,20 @@ class MongoClientSingleton:
             try:
                 return MongoDatabaseWrapper (self.connection.get_database (databaseName))
 
-            except Exception as exc:
+            except Exception as exc :
                 logging.error ("__MongoClientSingleton: getDatabase: Error getting database: '" + databaseName + "'")
                 logging.error ("[Exception: " + str (exc) +  "]")
 
 
         ### function: getCollection ###
 
-        def getCollection (self, collectionName, databaseName = config.mongoDatabase):
+        def getCollection (self, collectionName, databaseName = config.mongoDatabase) :
             return self.getDatabase (databaseName).getCollection (collectionName)
 
 
         ### function: close ###
 
-        def close (self):
+        def close (self) :
             try:
                 self.connection.close ()
 
@@ -62,7 +62,7 @@ class MongoClientSingleton:
 
     ### function: __new__ ###
 
-    def __new__(cls):
+    def __new__ (cls) :
         try :
             if MongoClientSingleton.instance is None :
                 MongoClientSingleton.instance = MongoClientSingleton.__MongoClientSingleton ()

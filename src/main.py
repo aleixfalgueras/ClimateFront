@@ -73,9 +73,13 @@ def opcuaTest ():
 
     productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 
-    clientStock.subscribeVarToMongoCollection (varTomatoes, productCollection)
-    clientStock.subscribeVarToMongoCollection (varBananas, productCollection)
-    clientStock.subscribeVarToMongoCollection (varApples, productCollection)
+    # clientStock.subscribeVarToMongoCollection (varTomatoes, productCollection)
+    # clientStock.subscribeVarToMongoCollection (varBananas, productCollection)
+    # clientStock.subscribeVarToMongoCollection (varApples, productCollection)
+
+    clientStock.subscribeToVar (varTomatoes)
+    clientStock.subscribeToVar (varBananas)
+    clientStock.subscribeToVar (varApples)
 
     serverStock.incrementStock ()
 

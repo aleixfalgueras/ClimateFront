@@ -9,7 +9,7 @@ from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 
 ### function: getRoutes ###
 
-def getRoutes (fields = dict()):
+def getRoutes (fields = None) :
     try :
         query = {}
         if fields is not None : query = fields
@@ -25,7 +25,7 @@ def getRoutes (fields = dict()):
 
 ### function: addRoute ###
 
-def addRoute (origin, destiny, departure, arrival, productsMongo):
+def addRoute (origin, destiny, departure, arrival, productsMongo) :
     try :
         route = Route (origin, destiny, departure, arrival, toProducts (productsMongo))
 
@@ -43,14 +43,14 @@ def addRoute (origin, destiny, departure, arrival, productsMongo):
 
 ### function: checkCancelRoute ###
 
-def checkCancelRoute (route):
+def checkCancelRoute (route) :
     if  (route.state == RouteState.PENDING): return True
     else                                   : return False
 
 
 ### function: cancelRoute ###
 
-def cancelRoute (route):
+def cancelRoute (route) :
     try :
         route.state = RouteState.CANCELED
 

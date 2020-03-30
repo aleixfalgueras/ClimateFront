@@ -24,7 +24,7 @@ def getProducts (fields = None) :
 
 ### function: checkProductStock ###
 
-def checkProductsStock (products):
+def checkProductsStock (products) :
     try :
         productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 
@@ -33,8 +33,8 @@ def checkProductsStock (products):
 
             productsFind = toProducts (mongoProductsFind)
 
-            if len (productsFind) == 0: return (False, product, 0)  # product doesn't exist
-            if int (product.quantity) > int (productsFind [0].quantity): return (False, product, 1)  # no stock for the product
+            if len (productsFind) == 0 : return (False, product, 0)  # product doesn't exist
+            if int (product.quantity) > int (productsFind [0].quantity) : return (False, product, 1)  # no stock for the product
 
         return (True, None, None)
 
@@ -45,7 +45,7 @@ def checkProductsStock (products):
 
 ### function: decrementProductStock ###
 
-def decrementProductsStock (products):
+def decrementProductsStock (products) :
     try :
         productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 
@@ -64,7 +64,7 @@ def decrementProductsStock (products):
 
 ### function: incrementProductsStock ###
 
-def incrementProductsStock (products):
+def incrementProductsStock (products) :
     try :
         productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 

@@ -42,7 +42,7 @@ class ServerOPCUASimulation :
 
             stock = objectsNode.add_object (namespaceIndex, "Stock")
 
-            stockItems = self.getStock (stock, namespaceIndex)
+            stockItems = self.addStock (stock, namespaceIndex)
 
             self.stockItems = stockItems
 
@@ -53,9 +53,9 @@ class ServerOPCUASimulation :
             logging.error ("[Exception: " + str (exc) + "]")
 
 
-    ### function: getStock ###
+    ### function: addStock ###
 
-    def getStock (self, stock, namespaceIndex) :
+    def addStock (self, stock, namespaceIndex) :
         try :
             stockItems = []
 
@@ -83,7 +83,7 @@ class ServerOPCUASimulation :
 
     ### function: incrementStock ###
 
-    def incrementStock(self) :
+    def incrementStock (self) :
         try :
             for item in self.stockItems :
                 quantity = randrange (10)
