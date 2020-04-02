@@ -8,7 +8,7 @@ from opcua import ua
 ################################################################################
 
 class Config:
-    logLevel = logging.WARNING
+    LOG_LEVEL = logging.WARNING
 
 ################################################################################
 # class: DevelopmentConfig
@@ -16,13 +16,17 @@ class Config:
 
 class DevelopmentConfig (Config):
     # Mongo Config
-    mongoUrl      = "mongodb://localhost"
-    mongoDatabase = "ClimateFront"
+    MONGO_URL      = "mongodb://localhost"
+    MONGO_DATABASE = "ClimateFront"
 
     # OPC UA Server Stock Simulation Config
-    serverOPCUASimulationEndpoint       = "opc.tcp://localhost:4840/stock"
-    serverOPCUASimulationSecurityIds    = "Anonymous"
-    serverOPCUASimulationSecurityPolicy = ua.SecurityPolicyType.NoSecurity
+    SERVER_OPCUA_SIMULATION_ENDPOINT        = "opc.tcp://localhost:4840/stock"
+    SERVER_OPCUA_SIMULATION_SECURITY_IDS    = "Anonymous"
+    SERVER_OPCUA_SIMULATION_SECURITY_POLICY = ua.SecurityPolicyType.NoSecurity
 
     # API REST Config
-    apiRestPort = 8080
+    API_REST_PORT = 8080
+
+    # Services - OpenWeatherMap
+    API_KEY = "fa5363235e9d90bef24be9a929e7f9c7"
+    API_BASE_CALL = "https://api.openweathermap.org/data/2.5/forecast?appid=" + API_KEY

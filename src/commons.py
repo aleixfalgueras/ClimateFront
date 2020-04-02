@@ -28,3 +28,28 @@ class MongoRouteFields:
     DEPARTURE = "departure"
     ARRIVAL = "arrival"
     PRODUCTS = "products"
+
+class MongoLocationForecast:
+    LATITUDE = "latitude"
+    LONGITUDE = "longitude"
+    COUNTRY = "country"
+    CITY = "city"
+    TIMEZONE = "timezone"
+    START_FORECAST = "start_forecast"
+    END_FORECAST = "end_forecast"
+    FORECAST = "forecasts"
+
+class MongoDayHourForecast:
+    DATE = "date"
+    HOUR = "hour"
+    WEATHER = "weather"
+    WEATHER_DES = "weather_description"
+    TMP = "temperature"
+    TMP_MIN = "temperature_min"
+    TMP_MAX = "temperature_max"
+    PRESSURE = "pressure"
+    HUMIDITY = "humidity"
+    WIND_SPEED = "wind_speed"
+
+
+

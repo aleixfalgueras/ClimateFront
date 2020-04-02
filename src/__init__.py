@@ -5,4 +5,4 @@ import logging
 
 config = DevelopmentConfig ()
 
-logging.basicConfig (level = config.logLevel)
+logging.basicConfig (level = config.LOG_LEVEL)

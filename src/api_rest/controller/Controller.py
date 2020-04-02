@@ -163,4 +163,4 @@ def cancel_route (route_id) :
 
 if __name__ == '__main__':
     config = DevelopmentConfig ()
-    app.run  (debug = True, port = config.apiRestPort)
+    app.run  (debug = True, port = config.API_REST_PORT)
