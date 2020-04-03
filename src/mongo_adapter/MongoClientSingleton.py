@@ -22,10 +22,10 @@ class MongoClientSingleton :
 
         def __init__ (self) :
             try :
-                self.connection = MongoClient (config.mongoUrl)
+                self.connection = MongoClient (config.MONGO_URL)
 
             except Exception as exc :
-                logging.error ("__MongoClientSingleton: __init__: Error connecting to " + config.mongoUrl)
+                logging.error ("__MongoClientSingleton: __init__: Error connecting to " + config.MONGO_URL)
                 logging.error ("[Exception: " + str (exc) +  "]")
 
 
@@ -42,7 +42,7 @@ class MongoClientSingleton :
 
         ### function: getCollection ###
 
-        def getCollection (self, collectionName, databaseName = config.mongoDatabase) :
+        def getCollection (self, collectionName, databaseName = config.MONGO_DATABASE) :
             return self.getDatabase (databaseName).getCollection (collectionName)
 
 
@@ -50,7 +50,7 @@ class MongoClientSingleton :
 
         def close (self) :
             try:
-                self.connection.close ()
+                self.close = self.connection.close ()
 
             except Exception as exc:
                 logging.error ("__MongoClientSingleton: Error closing connection")

@@ -18,10 +18,10 @@ class ServerOPCUASimulation :
         try :
             server = Server ()
 
-            server.set_endpoint (config.serverOPCUASimulationEndpoint)
+            server.set_endpoint (config.SERVER_OPCUA_SIMULATION_ENDPOINT)
 
-            server.set_security_IDs ([config.serverOPCUASimulationSecurityIds])
-            server.set_security_policy ([config.serverOPCUASimulationSecurityPolicy])
+            server.set_security_IDs ([config.SERVER_OPCUA_SIMULATION_SECURITY_IDS])
+            server.set_security_policy ([config.SERVER_OPCUA_SIMULATION_SECURITY_POLICY])
 
             self.server = server
             self.config = config
