@@ -8,7 +8,8 @@ from opcua import ua
 ################################################################################
 
 class Config:
-    LOG_LEVEL = logging.INFO
+    DEMO_OPCUA_LOG_LEVEL = logging.ERROR
+    API_REST_LOG_LEVEL = logging.INFO
 
 ################################################################################
 # class: DevelopmentConfig

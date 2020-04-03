@@ -8,19 +8,19 @@ from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 
 ### function: getProducts ###
 
-def getProducts (fields = None) :
+def getProducts (filters = None) :
     try :
         query = {}
-        if fields is not None : query = fields
+        if filters is not None : query = filters
 
-        logging.info ("ProductService: getProducts: fields: [" + str (fields) + "]")
+        logging.info ("ProductService: getProducts: filters: [" + str (filters) + "]")
 
         res = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT).find (query)
 
         return toProducts (res)
 
     except Exception as exc :
-        logging.error ("ProductService: getProducts: Error getting products, fields: " + str (fields))
+        logging.error ("ProductService: getProducts: Error getting products, filters: " + str (filters))
         logging.error ("[Exception: " + str (exc) + "]")
 
 

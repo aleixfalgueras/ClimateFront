@@ -11,19 +11,19 @@ from src.services.openWeatherMap.OpenWeatherMap import getForecast
 
 ### function: getRoutes ###
 
-def getRoutes (fields = None) :
+def getRoutes (filters = None) :
     try :
         query = {}
-        if fields is not None : query = fields
+        if filters is not None : query = filters
 
-        logging.info ("RouteService: getRoutes: fields: [" + str (fields) + "]")
+        logging.info ("RouteService: getRoutes: filters: [" + str (filters) + "]")
 
         res = MongoClientSingleton ().getCollection (MongoCollection.ROUTE).find (query)
 
         return toRoutes (res)
 
     except Exception as exc :
-        logging.error ("RouteService: getRoutes: Error getting routes, fields: " + str (fields))
+        logging.error ("RouteService: getRoutes: Error getting routes, filters: " + str (filters))
         logging.error ("[Exception: " + str (exc) + "]")
 
 

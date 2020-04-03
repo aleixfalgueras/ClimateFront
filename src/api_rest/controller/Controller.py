@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask, jsonify, request
 
 from src.api_rest.service.ProductService import getProducts, checkProductsStock
@@ -5,7 +7,6 @@ from src.api_rest.service.RouteService import getRoutes, addRoute, checkEditRout
 from src.api_rest.utils import toJsonArray, toProducts
 from src.commons import MongoRouteFields, RouteState, MongoProductFields
 from src.config import DevelopmentConfig
-
 
 ################################################################################
 # app
@@ -26,6 +27,8 @@ class BadRequest (Exception) :
 
 @app.errorhandler (BadRequest)
 def handle_bad_request (error) :
+    logging.error ("BadRequest: " + error.message)
+
     payload = dict (error.payload or ())
 
     payload ['status'] = error.status
@@ -51,7 +54,7 @@ def get_products () :
 
         for k in args.keys () :
             if k != MongoProductFields.ID and k != MongoProductFields.NAME and k != MongoProductFields.QUANTITY:
-                raise BadRequest ("Incorrect filter field: " + k  + ". Allowed fields: " + fieldsAllowed, 400001)
+                raise BadRequest ("Incorrect filter field: " + k  + ", allowed fields: " + fieldsAllowed, 400001)
 
         fields = {}
 
@@ -94,7 +97,7 @@ def get_routes () :
                 k != MongoRouteFields.DESTINY and k != MongoRouteFields.DEPARTURE and k != MongoRouteFields.ARRIVAL and \
                    k != MongoRouteFields.STRATEGY :
 
-                raise BadRequest ("Incorrect filter field: " + k + ". Allowed fields: " + fieldsAllowed, 400101)
+                raise BadRequest ("Incorrect filter field: " + k + ", allowed fields: " + fieldsAllowed, 400101)
 
         fields = {}
 
@@ -188,4 +191,5 @@ def cancel_route (route_id) :
 
 if __name__ == '__main__':
     config = DevelopmentConfig ()
+    logging.basicConfig (level = config.API_REST_LOG_LEVEL)
     app.run  (debug = True, port = config.API_REST_PORT)

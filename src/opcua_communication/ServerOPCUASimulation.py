@@ -1,5 +1,5 @@
 import logging
-from random import randrange
+from random import randint
 
 from opcua import Server
 
@@ -86,7 +86,7 @@ class ServerOPCUASimulation :
     def incrementStock (self) :
         try :
             for item in self.stockItems :
-                quantity = randrange (10)
+                quantity = randint (1, 10) # 1 <= x <= 10
                 newQuantity = item.get_value () + quantity
 
                 item.set_value (newQuantity)
@@ -94,3 +94,6 @@ class ServerOPCUASimulation :
         except Exception as exc :
             logging.error ("ServerOPCUASimulation: incrementStock: Error incrementing stock in OPCUA Server Simulation")
             logging.error ("[Exception: " + str (exc) + "]")
+
+    def stopServer (self):
+        self.server.stop ()
