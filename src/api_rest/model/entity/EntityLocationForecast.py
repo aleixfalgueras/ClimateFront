@@ -2,32 +2,34 @@ from src.commons import MongoLocationForecast
 
 
 ################################################################################
-# class: LocationForecast
+# class: EntityLocationForecast
 ################################################################################
 
-class LocationForecast :
+class EntityLocationForecast :
+
+    ENTITY_NAME = "LocationForecast"
 
 
     ### function: __init__ ###
 
-    def __init__ (self, latitude, longitude, country, city, timezone, forecasts) :
+    def __init__ (self, latitude, longitude, country, city, timezone, dayHourForecasts) :
         self.latitude = latitude
         self.longitude = longitude
         self.country = country
         self.city = city
         self.timezone = timezone
-        self.forecasts = forecasts
+        self.dayHourForecasts = dayHourForecasts
 
-        self.startForecast = forecasts [0].date + " " + forecasts [0].hour
-        self.endForecast = forecasts [len (forecasts) - 1].date + " " + forecasts [len (forecasts) - 1].hour
+        self.startForecast = dayHourForecasts [0].date + " " + dayHourForecasts [0].hour
+        self.endForecast = dayHourForecasts [len (dayHourForecasts) - 1].date + " " + dayHourForecasts [len (dayHourForecasts) - 1].hour
 
 
     ### function: toJson ###
 
     def toJson (self) :
-        forecasts = []
+        dayHourForecastsJsons = []
 
-        for forecast in self.forecasts : forecasts.append (forecast.toJson ())
+        for dayHourForecast in self.dayHourForecasts : dayHourForecastsJsons.append (dayHourForecast.toJson ())
 
         return {
             MongoLocationForecast.LATITUDE : self.latitude,
@@ -37,5 +39,5 @@ class LocationForecast :
             MongoLocationForecast.TIMEZONE : self.timezone,
             MongoLocationForecast.START_FORECAST : self.startForecast,
             MongoLocationForecast.END_FORECAST : self.endForecast,
-            MongoLocationForecast.FORECAST : forecasts
+            MongoLocationForecast.DAY_HOUR_FORECASTS : dayHourForecastsJsons
         }

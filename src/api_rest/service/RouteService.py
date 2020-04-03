@@ -1,11 +1,13 @@
 import logging
 
-from src.api_rest.model.EntityRoute import Route
+from src.api_rest.model.entity.EntityRoute import EntityRoute
 from src.api_rest.service.ProductService import incrementProductsStock, decrementProductsStock
 from src.api_rest.utils import toRoutes, toProducts
 from src.commons import MongoCollection, MongoRouteFields, RouteState
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
-
+from src.api_rest.model.entity.EntityPlan import EntityPlan
+from src.api_rest.model.planning_strategies.StochasticVRPMultiDepotStrategy import StochasticVRPMultiDepotStrategy
+from src.services.openWeatherMap.OpenWeatherMap import getForecast
 
 ### function: getRoutes ###
 
@@ -13,6 +15,8 @@ def getRoutes (fields = None) :
     try :
         query = {}
         if fields is not None : query = fields
+
+        logging.info ("RouteService: getRoutes: fields: [" + str (fields) + "]")
 
         res = MongoClientSingleton ().getCollection (MongoCollection.ROUTE).find (query)
 
@@ -25,9 +29,9 @@ def getRoutes (fields = None) :
 
 ### function: addRoute ###
 
-def addRoute (origin, destiny, departure, arrival, productsMongo) :
+def addRoute (origin, destiny, departure, arrival, productsMongo, strategy) :
     try :
-        route = Route (origin, destiny, departure, arrival, toProducts (productsMongo))
+        route = EntityRoute (origin, destiny, departure, arrival, toProducts (productsMongo), strategy)
 
         MongoClientSingleton ().getCollection (MongoCollection.ROUTE).insertOne (route.toJson ())
 
@@ -41,12 +45,24 @@ def addRoute (origin, destiny, departure, arrival, productsMongo) :
         logging.error ("[Exception: " + str (exc) + "]")
 
 
-### function: checkCancelRoute ###
+### function: checkEditRoute ###
 
-def checkCancelRoute (route) :
+def checkEditRoute (route) :
     if  (route.state == RouteState.PENDING): return True
     else                                   : return False
 
+### function: updateRoute ###
+
+def updateRoute (originalRoute, origin, destiny, departure, arrival, strategy):
+    values = {MongoRouteFields.ORIGIN : origin,
+              MongoRouteFields.DESTINY : destiny,
+              MongoRouteFields.DEPARTURE : departure,
+              MongoRouteFields.ARRIVAL : arrival,
+              MongoRouteFields.STRATEGY : strategy}
+
+    MongoClientSingleton ().getCollection (MongoCollection.ROUTE).updateOneById (originalRoute.id, values)
+
+    return getRoutes ({{MongoRouteFields.ID : originalRoute.id}}) [0]
 
 ### function: cancelRoute ###
 
@@ -63,4 +79,29 @@ def cancelRoute (route) :
 
     except Exception as exc :
         logging.error ("RouteService: cancelRoute: Error canceling route: " + str (route))
+        logging.error ("[Exception: " + str (exc) + "]")
+
+
+### function: addPlan ###
+
+def addPlan (route):
+    try :
+        # for the moment we only one use forecasts for the source and destiny places
+        locationForecastsUsed = [getForecast (route.origin), getForecast (route.destiny)]
+
+        strategy = None
+
+        if route.strategy == StochasticVRPMultiDepotStrategy.STRATEGY_NAME:
+            strategy = StochasticVRPMultiDepotStrategy (route, locationForecastsUsed)
+        else:
+            raise Exception ("Unknow strategy '" + route.strategy + "'")
+
+        plan = EntityPlan (route, strategy.planIt (), locationForecastsUsed)
+
+        MongoClientSingleton ().getCollection (MongoCollection.PLAN).insertOne (plan.toJson ())
+
+        return plan
+
+    except Exception as exc :
+        logging.error ("RouteService: addPlan: Error creating plan for the route: " + str (route))
         logging.error ("[Exception: " + str (exc) + "]")

@@ -4,17 +4,17 @@ from src.commons import MongoRouteFields, RouteState
 
 
 ################################################################################
-# class: Route
+# class: EntityRoute
 ################################################################################
 
-class Route :
+class EntityRoute :
 
     ENTITY_NAME = "Route"
 
 
     ### function: __init__ ###
 
-    def __init__ (self, origin, destiny, departure, arrival, products, id = None, state = RouteState.PENDING) :
+    def __init__ (self, origin, destiny, departure, arrival, products, strategy, id = None, state = RouteState.PENDING) :
         if id is None :
             self.id = str (time.time_ns ())
         else:
@@ -26,7 +26,7 @@ class Route :
         self.departure = departure
         self.arrival = arrival
         self.products = products
-
+        self.strategy = strategy
 
     ### function: __str__ ###
 
@@ -45,7 +45,8 @@ class Route :
                MongoRouteFields.DESTINY + ": " + self.destiny + \
                MongoRouteFields.DEPARTURE + ": " + self.departure + ", " + \
                MongoRouteFields.ARRIVAL + ": " + self.arrival + ", " + \
-               MongoRouteFields.PRODUCTS + ": " + productsString + ")"
+               MongoRouteFields.PRODUCTS + ": " + productsString + \
+               MongoRouteFields.STRATEGY + ": " + self.strategy + ")"
 
 
     ### function: toJson ###
@@ -62,5 +63,6 @@ class Route :
             MongoRouteFields.DESTINY : self.destiny,
             MongoRouteFields.DEPARTURE : self.departure,
             MongoRouteFields.ARRIVAL : self.arrival,
-            MongoRouteFields.PRODUCTS : products
+            MongoRouteFields.PRODUCTS : products,
+            MongoRouteFields.STRATEGY: self.strategy
         }

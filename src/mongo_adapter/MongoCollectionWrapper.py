@@ -23,7 +23,7 @@ class MongoCollectionWrapper :
 
     def insertOne (self, jsonDocument) :
         try :
-            self.collection.insert_one (jsonDocument)
+            return self.collection.insert_one (jsonDocument)
 
         except Exception as exc :
             logging.error ("MongoCollectionWrapper: insertOne: insert_one failed for the collection '" + \
@@ -46,7 +46,7 @@ class MongoCollectionWrapper :
 
     def updateOne (self, query, newValues) :
         try :
-            self.collection.update_one (query, newValues)
+            return self.collection.update_one (query, newValues)
 
         except Exception as exc :
             logging.error ("MongoCollectionWrapper: updateOne: update_one failed for the collection '" + self.collectionName + "', query: " +
@@ -54,8 +54,12 @@ class MongoCollectionWrapper :
             logging.error ("[Exception: " + str (exc) +  "]")
 
 
+    ### function: updateOneById ###
+
+    def updateOneById (self, id, values) :
+        return self.updateOne ({"id": id}, {"$set" : values})
+
     ### function: updateOneFieldById ###
 
     def updateOneFieldById (self, id, field, newValue) :
-        self.updateOne ({"id": id}, {"$set" : {field : newValue}})
-
+        return self.updateOne ({"id": id}, {"$set" : {field : newValue}})

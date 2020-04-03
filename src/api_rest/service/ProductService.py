@@ -13,6 +13,8 @@ def getProducts (fields = None) :
         query = {}
         if fields is not None : query = fields
 
+        logging.info ("ProductService: getProducts: fields: [" + str (fields) + "]")
+
         res = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT).find (query)
 
         return toProducts (res)

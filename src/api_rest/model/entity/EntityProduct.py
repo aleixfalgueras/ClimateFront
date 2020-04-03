@@ -2,10 +2,10 @@ from src.commons import MongoProductFields
 
 
 ################################################################################
-# class: Product
+# class: EntityProduct
 ################################################################################
 
-class Product () :
+class EntityProduct () :
 
     ENTITY_NAME = "Product"
 

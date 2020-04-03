@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 
 from src.api_rest.service.ProductService import getProducts, checkProductsStock
-from src.api_rest.service.RouteService import getRoutes, addRoute, checkCancelRoute, cancelRoute
+from src.api_rest.service.RouteService import getRoutes, addRoute, checkEditRoute, cancelRoute, addPlan, updateRoute
 from src.api_rest.utils import toJsonArray, toProducts
 from src.commons import MongoRouteFields, RouteState, MongoProductFields
 from src.config import DevelopmentConfig
@@ -86,11 +86,13 @@ def get_routes () :
         return jsonify (toJsonArray (getRoutes ()))
     else:
         fieldsAllowed = MongoRouteFields.ID + ", " + MongoRouteFields.STATE + ", " + MongoRouteFields.ORIGIN + ", " + \
-                        MongoRouteFields.DESTINY + ", " + MongoRouteFields.DEPARTURE + ", " + MongoRouteFields.ARRIVAL
+                        MongoRouteFields.DESTINY + ", " + MongoRouteFields.DEPARTURE + ", " + MongoRouteFields.ARRIVAL + ", " + \
+                        MongoRouteFields.STRATEGY
 
         for k in args.keys () :
             if k != MongoRouteFields.ID and k != MongoRouteFields.STATE and k != MongoRouteFields.ORIGIN and \
-                k != MongoRouteFields.DESTINY and k != MongoRouteFields.DEPARTURE and MongoRouteFields.ARRIVAL:
+                k != MongoRouteFields.DESTINY and k != MongoRouteFields.DEPARTURE and k != MongoRouteFields.ARRIVAL and \
+                   k != MongoRouteFields.STRATEGY :
 
                 raise BadRequest ("Incorrect filter field: " + k + ". Allowed fields: " + fieldsAllowed, 400101)
 
@@ -102,18 +104,38 @@ def get_routes () :
         if MongoRouteFields.DESTINY   in args : fields [MongoRouteFields.DESTINY]   = args [MongoRouteFields.DESTINY]
         if MongoRouteFields.DEPARTURE in args : fields [MongoRouteFields.DEPARTURE] = args [MongoRouteFields.DEPARTURE]
         if MongoRouteFields.ARRIVAL   in args : fields [MongoRouteFields.ARRIVAL]   = args [MongoRouteFields.ARRIVAL]
+        if MongoRouteFields.STRATEGY  in args : fields [MongoRouteFields.STRATEGY]  = args [MongoRouteFields.STRATEGY]
 
         return jsonify (toJsonArray (getRoutes (fields)))
 
 
-### GET: get_route
+### GET: PUT: get_route
 
-@app.route ('/routes/<string:route_id>')
+@app.route ('/routes/<string:route_id>', methods = ["GET", "PUT"])
 def get_route (route_id) :
     route = getRoutes ({MongoRouteFields.ID : route_id})
 
-    if  len (route) == 0 : raise BadRequest ("Route with id '" + route_id + "' not found", 400102)
-    else :                 return jsonify (route [0].toJson ())
+    if len (route) == 0 : raise BadRequest ("Route with id '" + route_id + "' not found", 400102)
+    else :
+        if request.method == "GET" : return jsonify (route [0].toJson ())
+        else :
+            if checkEditRoute (route [0]) :
+                # Route.products isn't an upgradeable field, you must cancel the route and creat it again
+
+                if request.json [MongoRouteFields.STATE] == RouteState.PLANNED : addPlan (route)
+
+                routeUpdated = updateRoute (route [0],
+                                            request.json [MongoRouteFields.ORIGIN],
+                                            request.json [MongoRouteFields.DESTINY],
+                                            request.json [MongoRouteFields.DEPARTURE],
+                                            request.json [MongoRouteFields.ARRIVAL],
+                                            request.json [MongoRouteFields.STRATEGY])
+
+
+                return jsonify (routeUpdated.toJson)
+            else :
+                raise BadRequest ("Only can update routes with state '" + RouteState.PENDING + "'", 400105)
+
 
 
 ### POST: add_route
@@ -123,12 +145,15 @@ def add_route () :
     (validStock, productError, errorCode) = checkProductsStock (toProducts (request.json [MongoRouteFields.PRODUCTS]))
 
     if validStock :
+        # front-end must handle cities, date and strategy type validations
+
         route = addRoute (
             request.json [MongoRouteFields.ORIGIN],
             request.json [MongoRouteFields.DESTINY],
             request.json [MongoRouteFields.DEPARTURE],
             request.json [MongoRouteFields.ARRIVAL],
-            request.json [MongoRouteFields.PRODUCTS]
+            request.json [MongoRouteFields.PRODUCTS],
+            request.json [MongoRouteFields.STRATEGY]
         )
 
         return jsonify ({"message" : "Route created successful", "route" : route.toJson ()})
@@ -149,7 +174,7 @@ def cancel_route (route_id) :
     if len (route) == 0 :
         return jsonify ({"message" : "Route with id '" + route_id + "' not found"})
     else :
-        if checkCancelRoute (route[0]):
+        if checkEditRoute (route[0]):
             routeCanceled = cancelRoute (route[0])
 
             return jsonify ({"message" : "Route canceled successful", "route" : routeCanceled.toJson ()})

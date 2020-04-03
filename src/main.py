@@ -61,7 +61,7 @@ def opcuaTest ():
     serverStock.startSimulation ()
     serverStock.incrementStock ()
 
-    clientStock = ClientOPCUA (config.serverOPCUASimulationEndpoint)
+    clientStock = ClientOPCUA (config.SERVER_OPCUA_SIMULATION_ENDPOINT)
 
     varTomatoes = clientStock.getObjectsVar ("2:Stock", "2:Tomatoes")
     varBananas  = clientStock.getObjectsVar ("2:Stock", "2:Bananas")

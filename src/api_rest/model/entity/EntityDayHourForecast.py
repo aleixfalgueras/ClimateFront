@@ -2,10 +2,12 @@ from src.commons import MongoDayHourForecast
 
 
 ################################################################################
-# class: DayHourForecast
+# class: EntityDayHourForecast
 ################################################################################
 
-class DayHourForecast :
+class EntityDayHourForecast :
+
+    ENTITY_NAME = "DayHourForecast"
 
 
     ### function: __init__ ###

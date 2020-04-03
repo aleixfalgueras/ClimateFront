@@ -1,7 +1,7 @@
 import logging
 
-from src.api_rest.model.EntityProduct import Product
-from src.api_rest.model.EntityRoute import Route
+from src.api_rest.model.entity.EntityProduct import EntityProduct
+from src.api_rest.model.entity.EntityRoute import EntityRoute
 from src.commons import MongoProductFields, MongoRouteFields
 
 
@@ -27,7 +27,7 @@ def toProducts (mongoCursor) :
         products = []
 
         for product in mongoCursor :
-            products.append (Product (
+            products.append (EntityProduct (
                 product [MongoProductFields.ID],
                 product [MongoProductFields.NAME],
                 product [MongoProductFields.QUANTITY]
@@ -36,7 +36,7 @@ def toProducts (mongoCursor) :
         return products
 
     except Exception as exc :
-        logging.error ("utils: toProducts: Error parsing products from mongo to " + Product.ENTITY_NAME)
+        logging.error ("utils: toProducts: Error parsing products from mongo to " + EntityProduct.ENTITY_NAME)
         logging.error ("[Exception: " + str (exc) + "]")
 
 
@@ -47,12 +47,13 @@ def toRoutes (mongoCursor):
         routes = []
 
         for route in mongoCursor :
-            routes.append (Route (
+            routes.append (EntityRoute (
                 route [MongoRouteFields.ORIGIN],
                 route [MongoRouteFields.DESTINY],
                 route [MongoRouteFields.DEPARTURE],
                 route [MongoRouteFields.ARRIVAL],
                 toProducts (route [MongoRouteFields.PRODUCTS]),
+                route [MongoRouteFields.STRATEGY],
                 route [MongoRouteFields.ID],
                 route [MongoRouteFields.STATE]
             ))
@@ -60,5 +61,5 @@ def toRoutes (mongoCursor):
         return routes
 
     except Exception as exc:
-        logging.error ("utils: toRoutes: Error parsing routes from mongo to " + Route.ENTITY_NAME)
+        logging.error ("utils: toRoutes: Error parsing routes from mongo to " + EntityRoute.ENTITY_NAME)
         logging.error ("[Exception: " + str (exc) + "]")
