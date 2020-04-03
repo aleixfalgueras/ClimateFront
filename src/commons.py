@@ -8,17 +8,26 @@ class RouteState ():
     CANCELED = "CANCELED"
 
 ################################################################################
-# mongo constants
+# class: MongoCollection
 ################################################################################
 
 class MongoCollection ():
     PRODUCT = "product"
     ROUTE = "route"
+    PLAN = "plan"
+
+################################################################################
+# class: MongoProductFields
+################################################################################
 
 class MongoProductFields:
     ID = "id"
     NAME = "name"
     QUANTITY = "quantity"
+
+################################################################################
+# class: MongoRouteFields
+################################################################################
 
 class MongoRouteFields:
     ID = "id"
@@ -28,6 +37,23 @@ class MongoRouteFields:
     DEPARTURE = "departure"
     ARRIVAL = "arrival"
     PRODUCTS = "products"
+    STRATEGY = "strategy"
+
+################################################################################
+# class: MongoPlan
+################################################################################
+
+class MongoPlan:
+    ROUTE = "route"
+    STRATEGY = "strategy"
+    PLAN = "plan"
+    DATE_CREATION = "date_creation"
+    HOUR_CREATION = "hour_creation"
+    LOCATION_FORECASTS = "location_forecasts"
+
+################################################################################
+# class: MongoLocationForecast
+################################################################################
 
 class MongoLocationForecast:
     LATITUDE = "latitude"
@@ -37,7 +63,11 @@ class MongoLocationForecast:
     TIMEZONE = "timezone"
     START_FORECAST = "start_forecast"
     END_FORECAST = "end_forecast"
-    FORECAST = "forecasts"
+    DAY_HOUR_FORECASTS = "day_hour_forecasts"
+
+################################################################################
+# class: MongoDayHourForecast
+################################################################################
 
 class MongoDayHourForecast:
     DATE = "date"
@@ -50,6 +80,3 @@ class MongoDayHourForecast:
     PRESSURE = "pressure"
     HUMIDITY = "humidity"
     WIND_SPEED = "wind_speed"
-
-
-

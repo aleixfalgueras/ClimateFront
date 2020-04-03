@@ -8,7 +8,7 @@ from opcua import ua
 ################################################################################
 
 class Config:
-    LOG_LEVEL = logging.WARNING
+    LOG_LEVEL = logging.INFO
 
 ################################################################################
 # class: DevelopmentConfig
