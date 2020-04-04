@@ -2,12 +2,13 @@ import logging
 
 from flask import Flask, jsonify, request
 
-from src.api_rest.service.PlanService import getPlans
+from src.api_rest.service.PlanService import getPlans, addPlan
 from src.api_rest.service.ProductService import getProducts, checkProductsStock
-from src.api_rest.service.RouteService import getRoutes, addRoute, checkEditRoute, cancelRoute, addPlan, updateRoute
+from src.api_rest.service.RouteService import getRoutes, addRoute, checkEditRoute, cancelRoute, updateRoute
 from src.api_rest.utils import toJsonArray, toProducts
 from src.commons import MongoRouteFields, RouteState, MongoProductFields
 from src.config import DevelopmentConfig
+
 
 ################################################################################
 # app

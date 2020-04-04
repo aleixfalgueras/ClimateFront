@@ -1,13 +1,22 @@
+################################################################################
+# class: StochasticVRPMultiDepotStrategy
+################################################################################
+
 class StochasticVRPMultiDepotStrategy:
 
     STRATEGY_NAME = "StochasticVRPMultiDepotStrategy"
 
-    def __init__ (self, route, forecasts):
+
+    ### function: __init__ ###
+
+    def __init__ (self, route, forecasts) :
         self.route = route
         self.forecasts = forecasts
 
 
-    def planIt (self):
+    ### function: planIt ###
+
+    def planIt (self) :
         # do some stochastic VRP multi-depot stuff
 
         return "This a fancy plan"

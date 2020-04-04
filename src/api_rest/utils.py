@@ -5,8 +5,16 @@ from src.api_rest.model.entity.EntityLocationForecast import EntityLocationForec
 from src.api_rest.model.entity.EntityPlan import EntityPlan
 from src.api_rest.model.entity.EntityProduct import EntityProduct
 from src.api_rest.model.entity.EntityRoute import EntityRoute
-from src.commons import MongoProductFields, MongoRouteFields, MongoDayHourForecastFields, MongoLocationForecastFields, MongoPlanFields
+from src.commons import MongoProductFields, MongoRouteFields, MongoDayHourForecastFields, MongoLocationForecastFields, \
+    MongoPlanFields
 
+################################################################################
+# class: ProdutOperation
+################################################################################
+
+class ProdutOperation:
+    INCREMENT = "increment"
+    DECREMENT = "decrement"
 
 ### function: toJsonArray ###
 
@@ -45,7 +53,7 @@ def toProducts (mongoCursor) :
 
 ### function: toRoute ###
 
-def toRoutes (mongoCursor):
+def toRoutes (mongoCursor) :
     try:
         routes = []
 
@@ -63,7 +71,7 @@ def toRoutes (mongoCursor):
 
         return routes
 
-    except Exception as exc:
+    except Exception as exc :
         logging.error ("utils: toRoutes: Error parsing MongoRoutes from mongo to " + EntityRoute.ENTITY_NAME)
         logging.error ("[Exception: " + str (exc) + "]")
 

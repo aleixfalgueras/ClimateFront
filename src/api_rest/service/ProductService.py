@@ -1,6 +1,6 @@
 import logging
 
-from src.api_rest.utils import toProducts
+from src.api_rest.utils import toProducts, ProdutOperation
 from src.commons import MongoCollection, MongoProductFields
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 
@@ -34,8 +34,8 @@ def checkProductsStock (products) :
 
             productsFind = toProducts (mongoProductsFind)
 
-            if len (productsFind) == 0 : return (False, product, 0)  # product doesn't exist
-            if int (product.quantity) > int (productsFind [0].quantity) : return (False, product, 1)  # no stock for the product
+            if len (productsFind) == 0 : return (False, product, 0) # product doesn't exist
+            if int (product.quantity) > int (productsFind [0].quantity) : return (False, product, 1) # no stock for the product
 
         return (True, None, None)
 
@@ -44,28 +44,9 @@ def checkProductsStock (products) :
         logging.error ("[Exception: " + str (exc) + "]")
 
 
-### function: decrementProductStock ###
-
-def decrementProductsStock (products) :
-    try :
-        productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
-
-        for product in products :
-            mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
-            productFind = toProducts (mongoProductsFind) [0]
-
-            newQuantity = int (productFind.quantity) - int (product.quantity)
-
-            productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
-
-    except Exception as exc :
-        logging.error ("ProductService: decrementProductsStock: Error decrementing products: " + products)
-        logging.error ("[Exception: " + str (exc) + "]")
-
-
 ### function: incrementProductsStock ###
 
-def incrementProductsStock (products) :
+def modifyProductsStock (products, operation):
     try :
         productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 
@@ -73,9 +54,16 @@ def incrementProductsStock (products) :
             mongoProductsFind = productCollection.find ({MongoProductFields.ID : product.id})
             productFind = toProducts (mongoProductsFind) [0]
 
-            newQuantity = int (productFind.quantity) + int (product.quantity)
+            if operation == ProdutOperation.INCREMENT :
+                newQuantity = int (productFind.quantity) + int (product.quantity)
+            elif operation == ProdutOperation.DECREMENT :
+                newQuantity = int (productFind.quantity) - int (product.quantity)
+            else:
+                raise Exception ("Unknow operation")
+
             productCollection.updateOneFieldById (product.id, MongoProductFields.QUANTITY, str (newQuantity))
 
     except Exception as exc :
-        logging.error ("ProductService: incrementProductsStock: Error incrementing products: " + products)
+        logging.error ("ProductService: modifyProductsStock: Error modifying  products: " + products +
+                       ", operation: " + operation)
         logging.error ("[Exception: " + str (exc) + "]")

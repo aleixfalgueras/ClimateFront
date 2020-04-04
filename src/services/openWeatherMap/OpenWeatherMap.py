@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+
 import requests
 
 from src import config
@@ -9,49 +10,55 @@ from src.api_rest.model.entity.EntityLocationForecast import EntityLocationForec
 
 ### function: getCityId ###
 
-def getCityId (codeIATACity):
+def getCityId (codeIATACity) :
     try:
-        if codeIATACity == "BCN": return "3128760"
-        elif codeIATACity == "LON": return "2643743"
+        if   codeIATACity == "BCN" : return "3128760"
+        elif codeIATACity == "LON" : return "2643743"
         else:
-            raise Exception ("Unknow city")
+            raise Exception ("Unknow city IATA code")
 
     except Exception as exc :
-        logging.error ("OpenWeatherMap: getCityId: Error getting id of city with IATA code: " + codeIATACity)
+        logging.error ("OpenWeatherMap: getCityId: Error getting id of city IATA code: " + codeIATACity)
         logging.error ("[Exception: " + str (exc) + "]")
 
 
 ### function: getForecast ###
 
-def getForecast (codeIATACity, startDay = datetime.now ().strftime ("%Y%m%d"), days = 5, hours = 3) : # free version: 5 days - 3 hours
+def getCityForecast (codeIATACity, startDay = datetime.now ().strftime ("%Y%m%d"), days = 5, hours = 3) :
     try:
-
         cityId = getCityId (codeIATACity)
 
-        apiCityCall = config.API_BASE_CALL + "&id=" + cityId
+        apiCityCall  = config.API_BASE_CALL + "&id=" + cityId
         jsonResponse = requests.get (apiCityCall).json ()
 
-        forecasts = []
+        latitude  = str (jsonResponse ['city'] ['coord'] ['lat'])
+        longitude = str (jsonResponse ['city'] ['coord'] ['lon'])
+        country   = jsonResponse ['city'] ['country']
+        cityName  = jsonResponse ['city'] ['name']
+        timezone  = str (jsonResponse ['city'] ['timezone'])
 
-        for blockForecastInfo in jsonResponse ['list'] :
-            originalDate, hour = blockForecastInfo ['dt_txt'].split (' ')
+        dayHourForecasts = []
 
-            date = originalDate.replace ("-", "")
+        for forecastInfo in jsonResponse ['list'] :
+            date, hour = forecastInfo ['dt_txt'].split (' ')
+
+            date = date.replace ("-", "")
             hour = hour [:5]
 
-            weather = blockForecastInfo ['weather'] [0] ['main']
-            weatherDescription = blockForecastInfo ['weather'] [0] ['description']
+            weather            = forecastInfo ['weather'] [0] ['main']
+            weatherDescription = forecastInfo ['weather'] [0] ['description']
 
-            temperature = '{:.2f}'.format (blockForecastInfo ['main'] ['temp'] - 273)
-            minimTemperature = '{:.2f}'.format (blockForecastInfo ['main'] ['temp_min'] - 273)
-            maximTemperature = '{:.2f}'.format (blockForecastInfo ['main'] ['temp_max'] - 273)
+            temperature      = '{:.2f}'.format (forecastInfo ['main'] ['temp'] - 273)
+            minimTemperature = '{:.2f}'.format (forecastInfo ['main'] ['temp_min'] - 273)
+            maximTemperature = '{:.2f}'.format (forecastInfo ['main'] ['temp_max'] - 273)
 
-            pressure = str (blockForecastInfo ['main'] ['pressure'])
-            humidity = str (blockForecastInfo ['main'] ['humidity'])
+            pressure = str (forecastInfo ['main'] ['pressure'])
+            humidity = str (forecastInfo ['main'] ['humidity'])
 
-            windSpeed = str (blockForecastInfo ['wind'] ['speed'])
+            windSpeed = str (forecastInfo ['wind'] ['speed'])
 
-            forecasts.append (EntityDayHourForecast (date,
+            dayHourForecasts.append (EntityDayHourForecast (
+                                                     date,
                                                      hour,
                                                      weather,
                                                      weatherDescription,
@@ -62,14 +69,8 @@ def getForecast (codeIATACity, startDay = datetime.now ().strftime ("%Y%m%d"), d
                                                      humidity,
                                                      windSpeed))
 
-        latitude = str (jsonResponse ['city'] ['coord'] ['lat'])
-        longitude = str (jsonResponse ['city'] ['coord'] ['lon'])
-        country = jsonResponse ['city'] ['country']
-        cityName = jsonResponse ['city'] ['name']
-        timezone = str (jsonResponse ['city'] ['timezone'])
+        return EntityLocationForecast (latitude, longitude, country, cityName, timezone, dayHourForecasts)
 
-        return EntityLocationForecast (latitude, longitude, country, cityName, timezone, forecasts)
-
-    except Exception as exc:
-        logging.error ("OpenWeatherMap: getForecast: Error getting forcasts for the city with IATA code: " + codeIATACity)
+    except Exception as exc :
+        logging.error ("OpenWeatherMap: getCityForecast: Error getting forcasts for the city IATA code: " + codeIATACity)
         logging.error ("[Exception: " + str (exc) + "]")

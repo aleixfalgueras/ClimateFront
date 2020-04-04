@@ -1,13 +1,10 @@
 import logging
 
-from src.api_rest.model.entity.EntityPlan import EntityPlan
 from src.api_rest.model.entity.EntityRoute import EntityRoute
-from src.api_rest.model.planning_strategies.StochasticVRPMultiDepotStrategy import StochasticVRPMultiDepotStrategy
-from src.api_rest.service.ProductService import incrementProductsStock, decrementProductsStock
-from src.api_rest.utils import toRoutes, toProducts
+from src.api_rest.service.ProductService import modifyProductsStock
+from src.api_rest.utils import toRoutes, toProducts, ProdutOperation
 from src.commons import MongoCollection, MongoRouteFields, RouteState
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
-from src.services.openWeatherMap.OpenWeatherMap import getForecast
 
 
 ### function: getRoutes ###
@@ -36,7 +33,7 @@ def addRoute (origin, destiny, departure, arrival, productsMongo, strategy) :
 
         MongoClientSingleton ().getCollection (MongoCollection.ROUTE).insertOne (route.toJson ())
 
-        decrementProductsStock (route.products)
+        modifyProductsStock (route.products, ProdutOperation.DECREMENT)
 
         return route
 
@@ -70,33 +67,10 @@ def cancelRoute (route) :
         MongoClientSingleton ().getCollection (MongoCollection.ROUTE)\
             .updateOneFieldById (route.id, MongoRouteFields.STATE, route.state)
 
-        incrementProductsStock (route.products)
+        modifyProductsStock (route.products, ProdutOperation.INCREMENT)
 
         return route
 
     except Exception as exc :
         logging.error ("RouteService: cancelRoute: Error canceling route: " + str (route))
-        logging.error ("[Exception: " + str (exc) + "]")
-
-
-### function: addPlan ###
-
-def addPlan (route):
-    try :
-        # for the moment we only one use forecasts for the source and destiny places
-        locationForecastsUsed = [getForecast (route.origin), getForecast (route.destiny)]
-
-        if route.strategy == StochasticVRPMultiDepotStrategy.STRATEGY_NAME :
-            strategy = StochasticVRPMultiDepotStrategy (route, locationForecastsUsed)
-        else :
-            raise Exception ("Unknow strategy '" + route.strategy + "'")
-
-        plan = EntityPlan (route, strategy.planIt (), locationForecastsUsed)
-
-        MongoClientSingleton ().getCollection (MongoCollection.PLAN).insertOne (plan.toJson ())
-
-        return plan
-
-    except Exception as exc :
-        logging.error ("RouteService: addPlan: Error creating plan for the route: " + str (route))
         logging.error ("[Exception: " + str (exc) + "]")

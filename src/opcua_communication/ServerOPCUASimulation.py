@@ -95,5 +95,8 @@ class ServerOPCUASimulation :
             logging.error ("ServerOPCUASimulation: incrementStock: Error incrementing stock in OPCUA Server Simulation")
             logging.error ("[Exception: " + str (exc) + "]")
 
+
+    ### function: stopServer ###
+
     def stopServer (self):
         self.server.stop ()
