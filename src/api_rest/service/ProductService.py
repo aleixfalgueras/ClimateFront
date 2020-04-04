@@ -35,7 +35,7 @@ def checkProductsStock (products) :
             productsFind = toProducts (mongoProductsFind)
 
             if len (productsFind) == 0 : return (False, product, 0) # product doesn't exist
-            if int (product.quantity) > int (productsFind [0].quantity) : return (False, product, 1) # no stock for the product
+            if int (product.quantity) > int (productsFind [0].quantity) : return (False, productsFind [0], 1) # no stock for the product
 
         return (True, None, None)
 
