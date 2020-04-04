@@ -14,13 +14,17 @@ class EntityPlan:
 
     ### function: __init__ ###
 
-    def __init__ (self, route, plan, locationForecasts) :
+    def __init__ (self,
+                  route,
+                  plan,
+                  locationForecasts,
+                  dateCreation = datetime.now ().strftime ("%Y%m%d"),
+                  hourCreation = datetime.now ().strftime ("%H%M%S")) :
         self.route = route
         self.plan = plan
         self.locationForecasts = locationForecasts
-
-        self.dateCreation = datetime.now ().strftime ("%Y%m%d")
-        self.hourCreation = datetime.now ().strftime ("%H%M%S")
+        self.dateCreation = dateCreation
+        self.hourCreation = hourCreation
 
 
     ### function: toJson ###

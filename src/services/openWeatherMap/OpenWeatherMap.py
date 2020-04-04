@@ -1,5 +1,5 @@
 import logging
-
+from datetime import datetime
 import requests
 
 from src import config
@@ -23,7 +23,7 @@ def getCityId (codeIATACity):
 
 ### function: getForecast ###
 
-def getForecast (codeIATACity, days = 5, hours = 3) : # free version: 5 days - 3 hours
+def getForecast (codeIATACity, startDay = datetime.now ().strftime ("%Y%m%d"), days = 5, hours = 3) : # free version: 5 days - 3 hours
     try:
 
         cityId = getCityId (codeIATACity)

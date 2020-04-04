@@ -2,6 +2,7 @@ import logging
 
 from flask import Flask, jsonify, request
 
+from src.api_rest.service.PlanService import getPlans
 from src.api_rest.service.ProductService import getProducts, checkProductsStock
 from src.api_rest.service.RouteService import getRoutes, addRoute, checkEditRoute, cancelRoute, addPlan, updateRoute
 from src.api_rest.utils import toJsonArray, toProducts
@@ -113,7 +114,6 @@ def get_routes () :
 
 
 ### GET: PUT: get_route
-
 @app.route ('/routes/<string:route_id>', methods = ["GET", "PUT"])
 def get_route (route_id) :
     route = getRoutes ({MongoRouteFields.ID : route_id})
@@ -123,22 +123,31 @@ def get_route (route_id) :
         if request.method == "GET" : return jsonify (route [0].toJson ())
         else :
             if checkEditRoute (route [0]) :
-                # Route.products isn't an upgradeable field, you must cancel the route and creat it again
+                fieldsAllowed = MongoRouteFields.STATE + ", " + MongoRouteFields.ORIGIN + ", " + MongoRouteFields.DESTINY + \
+                                ", " + MongoRouteFields.DEPARTURE + ", " + MongoRouteFields.ARRIVAL + ", " + MongoRouteFields.STRATEGY
 
-                if request.json [MongoRouteFields.STATE] == RouteState.PLANNED : addPlan (route)
+                for k in request.json.keys () :
+                    if k != MongoRouteFields.STATE and k != MongoRouteFields.ORIGIN and k != MongoRouteFields.DESTINY and \
+                            k != MongoRouteFields.DEPARTURE and k != MongoRouteFields.ARRIVAL and k != MongoRouteFields.STRATEGY :
+                        raise BadRequest ("Field not upgradeable: " + k + ", allowed fields: " + fieldsAllowed, 400106)
 
-                routeUpdated = updateRoute (route [0],
-                                            request.json [MongoRouteFields.ORIGIN],
-                                            request.json [MongoRouteFields.DESTINY],
-                                            request.json [MongoRouteFields.DEPARTURE],
-                                            request.json [MongoRouteFields.ARRIVAL],
-                                            request.json [MongoRouteFields.STRATEGY])
+                fields = {}
 
+                if MongoRouteFields.STATE     in request.json : fields [MongoRouteFields.STATE]     = request.json [MongoRouteFields.STATE]
+                if MongoRouteFields.ORIGIN    in request.json : fields [MongoRouteFields.ORIGIN]    = request.json [MongoRouteFields.ORIGIN]
+                if MongoRouteFields.DESTINY   in request.json : fields [MongoRouteFields.DESTINY]   = request.json [MongoRouteFields.DESTINY]
+                if MongoRouteFields.DEPARTURE in request.json : fields [MongoRouteFields.DEPARTURE] = request.json [MongoRouteFields.DEPARTURE]
+                if MongoRouteFields.ARRIVAL   in request.json : fields [MongoRouteFields.ARRIVAL]   = request.json [MongoRouteFields.ARRIVAL]
+                if MongoRouteFields.STRATEGY  in request.json : fields [MongoRouteFields.STRATEGY]  = request.json [MongoRouteFields.STRATEGY]
 
-                return jsonify (routeUpdated.toJson)
+                routeUpdated = updateRoute (route [0], fields)
+
+                # if state has change to RouteState.PLANNED
+                if routeUpdated.state == RouteState.PLANNED : addPlan (routeUpdated)
+
+                return jsonify (routeUpdated.toJson ())
             else :
                 raise BadRequest ("Only can update routes with state '" + RouteState.PENDING + "'", 400105)
-
 
 
 ### POST: add_route
@@ -184,6 +193,11 @@ def cancel_route (route_id) :
         else :
             raise BadRequest ("Only can cancel routes with state '" + RouteState.PENDING + "'", 400105)
 
+
+### GET: get_plans
+@app.route ('/plans')
+def get_plans () :
+    return jsonify (toJsonArray (getPlans ()))
 
 ########################################################################################################################
 ###########################                            API REST                            #############################

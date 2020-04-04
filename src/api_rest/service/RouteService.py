@@ -53,16 +53,10 @@ def checkEditRoute (route) :
 
 ### function: updateRoute ###
 
-def updateRoute (originalRoute, origin, destiny, departure, arrival, strategy):
-    values = {MongoRouteFields.ORIGIN : origin,
-              MongoRouteFields.DESTINY : destiny,
-              MongoRouteFields.DEPARTURE : departure,
-              MongoRouteFields.ARRIVAL : arrival,
-              MongoRouteFields.STRATEGY : strategy}
+def updateRoute (originalRoute, fieldsToUpdate):
+    MongoClientSingleton ().getCollection (MongoCollection.ROUTE).updateOneById (originalRoute.id, fieldsToUpdate)
 
-    MongoClientSingleton ().getCollection (MongoCollection.ROUTE).updateOneById (originalRoute.id, values)
-
-    return getRoutes ({{MongoRouteFields.ID : originalRoute.id}}) [0]
+    return getRoutes ({MongoRouteFields.ID : originalRoute.id}) [0]
 
 ### function: cancelRoute ###
 

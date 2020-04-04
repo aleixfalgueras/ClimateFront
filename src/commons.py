@@ -40,18 +40,6 @@ class MongoRouteFields:
     STRATEGY = "strategy"
 
 ################################################################################
-# class: MongoPlan
-################################################################################
-
-class MongoPlan:
-    ROUTE = "route"
-    STRATEGY = "strategy"
-    PLAN = "plan"
-    DATE_CREATION = "date_creation"
-    HOUR_CREATION = "hour_creation"
-    LOCATION_FORECASTS = "location_forecasts"
-
-################################################################################
 # class: MongoLocationForecast
 ################################################################################
 
@@ -80,3 +68,14 @@ class MongoDayHourForecast:
     PRESSURE = "pressure"
     HUMIDITY = "humidity"
     WIND_SPEED = "wind_speed"
+
+################################################################################
+# class: MongoPlan
+################################################################################
+
+class MongoPlan :
+    ROUTE = "route"
+    PLAN = "plan"
+    LOCATION_FORECASTS = "location_forecasts"
+    DATE_CREATION = "date_creation"
+    HOUR_CREATION = "hour_creation"
