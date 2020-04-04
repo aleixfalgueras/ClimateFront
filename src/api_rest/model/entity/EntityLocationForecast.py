@@ -1,4 +1,4 @@
-from src.commons import MongoLocationForecast
+from src.commons import MongoLocationForecastFields
 
 
 ################################################################################
@@ -32,12 +32,12 @@ class EntityLocationForecast :
         for dayHourForecast in self.dayHourForecasts : dayHourForecastsJsons.append (dayHourForecast.toJson ())
 
         return {
-            MongoLocationForecast.LATITUDE : self.latitude,
-            MongoLocationForecast.LONGITUDE : self.longitude,
-            MongoLocationForecast.COUNTRY : self.country,
-            MongoLocationForecast.CITY : self.city,
-            MongoLocationForecast.TIMEZONE : self.timezone,
-            MongoLocationForecast.START_FORECAST : self.startForecast,
-            MongoLocationForecast.END_FORECAST : self.endForecast,
-            MongoLocationForecast.DAY_HOUR_FORECASTS : dayHourForecastsJsons
+            MongoLocationForecastFields.LATITUDE : self.latitude,
+            MongoLocationForecastFields.LONGITUDE : self.longitude,
+            MongoLocationForecastFields.COUNTRY : self.country,
+            MongoLocationForecastFields.CITY : self.city,
+            MongoLocationForecastFields.TIMEZONE : self.timezone,
+            MongoLocationForecastFields.START_FORECAST : self.startForecast,
+            MongoLocationForecastFields.END_FORECAST : self.endForecast,
+            MongoLocationForecastFields.DAY_HOUR_FORECASTS : dayHourForecastsJsons
         }

@@ -1,4 +1,4 @@
-from src.commons import MongoDayHourForecast
+from src.commons import MongoDayHourForecastFields
 
 
 ################################################################################
@@ -29,14 +29,14 @@ class EntityDayHourForecast :
 
     def toJson (self) :
         return {
-            MongoDayHourForecast.DATE : self.date,
-            MongoDayHourForecast.HOUR : self.hour,
-            MongoDayHourForecast.WEATHER : self.weather,
-            MongoDayHourForecast.WEATHER_DES : self.weatherDes,
-            MongoDayHourForecast.TMP : self.tmp,
-            MongoDayHourForecast.TMP_MIN : self.minTmp,
-            MongoDayHourForecast.TMP_MAX : self.maxTmp,
-            MongoDayHourForecast.PRESSURE : self.pressure,
-            MongoDayHourForecast.HUMIDITY : self.humidity,
-            MongoDayHourForecast.WIND_SPEED : self.windSpeed
+            MongoDayHourForecastFields.DATE : self.date,
+            MongoDayHourForecastFields.HOUR : self.hour,
+            MongoDayHourForecastFields.WEATHER : self.weather,
+            MongoDayHourForecastFields.WEATHER_DES : self.weatherDes,
+            MongoDayHourForecastFields.TMP : self.tmp,
+            MongoDayHourForecastFields.TMP_MIN : self.minTmp,
+            MongoDayHourForecastFields.TMP_MAX : self.maxTmp,
+            MongoDayHourForecastFields.PRESSURE : self.pressure,
+            MongoDayHourForecastFields.HUMIDITY : self.humidity,
+            MongoDayHourForecastFields.WIND_SPEED : self.windSpeed
         }

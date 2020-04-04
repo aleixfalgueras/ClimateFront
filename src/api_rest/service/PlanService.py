@@ -1,8 +1,9 @@
 import logging
 
+from src.api_rest.utils import toPlans
 from src.commons import MongoCollection
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
-from src.api_rest.utils import toPlans
+
 
 ### function: getPlans ###
 

@@ -1,4 +1,3 @@
-from src.api_rest.utils import toProducts
 import logging
 
 from src.api_rest.utils import toProducts

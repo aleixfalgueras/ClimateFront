@@ -40,24 +40,10 @@ class MongoRouteFields:
     STRATEGY = "strategy"
 
 ################################################################################
-# class: MongoLocationForecast
+# class: MongoDayHourForecastFields
 ################################################################################
 
-class MongoLocationForecast:
-    LATITUDE = "latitude"
-    LONGITUDE = "longitude"
-    COUNTRY = "country"
-    CITY = "city"
-    TIMEZONE = "timezone"
-    START_FORECAST = "start_forecast"
-    END_FORECAST = "end_forecast"
-    DAY_HOUR_FORECASTS = "day_hour_forecasts"
-
-################################################################################
-# class: MongoDayHourForecast
-################################################################################
-
-class MongoDayHourForecast:
+class MongoDayHourForecastFields:
     DATE = "date"
     HOUR = "hour"
     WEATHER = "weather"
@@ -70,10 +56,24 @@ class MongoDayHourForecast:
     WIND_SPEED = "wind_speed"
 
 ################################################################################
-# class: MongoPlan
+# class: MongoLocationForecastFields
 ################################################################################
 
-class MongoPlan :
+class MongoLocationForecastFields:
+    LATITUDE = "latitude"
+    LONGITUDE = "longitude"
+    COUNTRY = "country"
+    CITY = "city"
+    TIMEZONE = "timezone"
+    START_FORECAST = "start_forecast"
+    END_FORECAST = "end_forecast"
+    DAY_HOUR_FORECASTS = "day_hour_forecasts"
+
+################################################################################
+# class: MongoPlanFields
+################################################################################
+
+class MongoPlanFields :
     ROUTE = "route"
     PLAN = "plan"
     LOCATION_FORECASTS = "location_forecasts"

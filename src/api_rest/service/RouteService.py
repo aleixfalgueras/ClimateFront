@@ -1,13 +1,14 @@
 import logging
 
+from src.api_rest.model.entity.EntityPlan import EntityPlan
 from src.api_rest.model.entity.EntityRoute import EntityRoute
+from src.api_rest.model.planning_strategies.StochasticVRPMultiDepotStrategy import StochasticVRPMultiDepotStrategy
 from src.api_rest.service.ProductService import incrementProductsStock, decrementProductsStock
 from src.api_rest.utils import toRoutes, toProducts
 from src.commons import MongoCollection, MongoRouteFields, RouteState
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
-from src.api_rest.model.entity.EntityPlan import EntityPlan
-from src.api_rest.model.planning_strategies.StochasticVRPMultiDepotStrategy import StochasticVRPMultiDepotStrategy
 from src.services.openWeatherMap.OpenWeatherMap import getForecast
+
 
 ### function: getRoutes ###
 
@@ -51,12 +52,14 @@ def checkEditRoute (route) :
     if  (route.state == RouteState.PENDING): return True
     else                                   : return False
 
+
 ### function: updateRoute ###
 
 def updateRoute (originalRoute, fieldsToUpdate):
     MongoClientSingleton ().getCollection (MongoCollection.ROUTE).updateOneById (originalRoute.id, fieldsToUpdate)
 
     return getRoutes ({MongoRouteFields.ID : originalRoute.id}) [0]
+
 
 ### function: cancelRoute ###
 
@@ -83,11 +86,9 @@ def addPlan (route):
         # for the moment we only one use forecasts for the source and destiny places
         locationForecastsUsed = [getForecast (route.origin), getForecast (route.destiny)]
 
-        strategy = None
-
-        if route.strategy == StochasticVRPMultiDepotStrategy.STRATEGY_NAME:
+        if route.strategy == StochasticVRPMultiDepotStrategy.STRATEGY_NAME :
             strategy = StochasticVRPMultiDepotStrategy (route, locationForecastsUsed)
-        else:
+        else :
             raise Exception ("Unknow strategy '" + route.strategy + "'")
 
         plan = EntityPlan (route, strategy.planIt (), locationForecastsUsed)

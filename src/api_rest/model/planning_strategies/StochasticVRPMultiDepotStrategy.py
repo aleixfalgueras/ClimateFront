@@ -1,6 +1,3 @@
-from datetime import datetime
-
-
 class StochasticVRPMultiDepotStrategy:
 
     STRATEGY_NAME = "StochasticVRPMultiDepotStrategy"

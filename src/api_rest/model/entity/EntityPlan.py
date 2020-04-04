@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.commons import MongoPlan
+from src.commons import MongoPlanFields
 
 
 ################################################################################
@@ -35,9 +35,9 @@ class EntityPlan:
         for locForecast in self.locationForecasts: locationForecastsJsons.append (locForecast.toJson ())
 
         return {
-            MongoPlan.ROUTE : self.route.toJson (),
-            MongoPlan.PLAN : self.plan,
-            MongoPlan.LOCATION_FORECASTS : locationForecastsJsons,
-            MongoPlan.DATE_CREATION : self.dateCreation,
-            MongoPlan.HOUR_CREATION : self.hourCreation
+            MongoPlanFields.ROUTE : self.route.toJson (),
+            MongoPlanFields.PLAN : self.plan,
+            MongoPlanFields.LOCATION_FORECASTS : locationForecastsJsons,
+            MongoPlanFields.DATE_CREATION : self.dateCreation,
+            MongoPlanFields.HOUR_CREATION : self.hourCreation
         }

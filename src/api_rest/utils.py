@@ -1,11 +1,11 @@
 import logging
 
-from src.api_rest.model.entity.EntityProduct import EntityProduct
-from src.api_rest.model.entity.EntityLocationForecast import EntityLocationForecast
 from src.api_rest.model.entity.EntityDayHourForecast import EntityDayHourForecast
+from src.api_rest.model.entity.EntityLocationForecast import EntityLocationForecast
 from src.api_rest.model.entity.EntityPlan import EntityPlan
+from src.api_rest.model.entity.EntityProduct import EntityProduct
 from src.api_rest.model.entity.EntityRoute import EntityRoute
-from src.commons import MongoProductFields, MongoRouteFields, MongoDayHourForecast, MongoLocationForecast, MongoPlan
+from src.commons import MongoProductFields, MongoRouteFields, MongoDayHourForecastFields, MongoLocationForecastFields, MongoPlanFields
 
 
 ### function: toJsonArray ###
@@ -76,16 +76,16 @@ def toDayHourForecasts (mongoCursor) :
 
         for dayHourForecast in mongoCursor :
             dayHourForecasts.append (EntityDayHourForecast (
-                dayHourForecast [MongoDayHourForecast.DATE],
-                dayHourForecast [MongoDayHourForecast.HOUR],
-                dayHourForecast [MongoDayHourForecast.WEATHER],
-                dayHourForecast [MongoDayHourForecast.WEATHER_DES],
-                dayHourForecast [MongoDayHourForecast.TMP],
-                dayHourForecast [MongoDayHourForecast.TMP_MIN],
-                dayHourForecast [MongoDayHourForecast.TMP_MAX],
-                dayHourForecast [MongoDayHourForecast.PRESSURE],
-                dayHourForecast [MongoDayHourForecast.HUMIDITY],
-                dayHourForecast [MongoDayHourForecast.WIND_SPEED]
+                dayHourForecast [MongoDayHourForecastFields.DATE],
+                dayHourForecast [MongoDayHourForecastFields.HOUR],
+                dayHourForecast [MongoDayHourForecastFields.WEATHER],
+                dayHourForecast [MongoDayHourForecastFields.WEATHER_DES],
+                dayHourForecast [MongoDayHourForecastFields.TMP],
+                dayHourForecast [MongoDayHourForecastFields.TMP_MIN],
+                dayHourForecast [MongoDayHourForecastFields.TMP_MAX],
+                dayHourForecast [MongoDayHourForecastFields.PRESSURE],
+                dayHourForecast [MongoDayHourForecastFields.HUMIDITY],
+                dayHourForecast [MongoDayHourForecastFields.WIND_SPEED]
             ))
 
         return dayHourForecasts
@@ -103,12 +103,12 @@ def toLocationForecasts (mongoCursor) :
 
         for locationForecast in mongoCursor :
             locationForecasts.append (EntityLocationForecast (
-                locationForecast [MongoLocationForecast.LATITUDE],
-                locationForecast [MongoLocationForecast.LONGITUDE],
-                locationForecast [MongoLocationForecast.COUNTRY],
-                locationForecast [MongoLocationForecast.CITY],
-                locationForecast [MongoLocationForecast.TIMEZONE],
-                toDayHourForecasts (locationForecast [MongoLocationForecast.DAY_HOUR_FORECASTS])
+                locationForecast [MongoLocationForecastFields.LATITUDE],
+                locationForecast [MongoLocationForecastFields.LONGITUDE],
+                locationForecast [MongoLocationForecastFields.COUNTRY],
+                locationForecast [MongoLocationForecastFields.CITY],
+                locationForecast [MongoLocationForecastFields.TIMEZONE],
+                toDayHourForecasts (locationForecast [MongoLocationForecastFields.DAY_HOUR_FORECASTS])
             ))
 
         return locationForecasts
@@ -126,15 +126,15 @@ def toPlans (mongoCursor) :
 
         for plan in mongoCursor :
             plans.append (EntityPlan (
-                toRoutes ([plan [MongoPlan.ROUTE]]) [0],
-                plan [MongoPlan.PLAN],
-                toLocationForecasts (plan [MongoPlan.LOCATION_FORECASTS]),
-                plan [MongoPlan.DATE_CREATION],
-                plan [MongoPlan.HOUR_CREATION]
+                toRoutes ([plan [MongoPlanFields.ROUTE]]) [0],
+                plan [MongoPlanFields.PLAN],
+                toLocationForecasts (plan [MongoPlanFields.LOCATION_FORECASTS]),
+                plan [MongoPlanFields.DATE_CREATION],
+                plan [MongoPlanFields.HOUR_CREATION]
             ))
 
         return plans
 
     except Exception as exc :
-        logging.error ("utils: toPlans: Error parsing MongoPlan from mongo to " + EntityLocationForecast.ENTITY_NAME)
+        logging.error ("utils: toPlans: Error parsing MongoPlan from mongo to " + EntityPlan.ENTITY_NAME)
         logging.error ("[Exception: " + str (exc) + "]")
