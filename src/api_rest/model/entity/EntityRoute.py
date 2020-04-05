@@ -46,7 +46,7 @@ class EntityRoute :
                MongoRouteFields.DEPARTURE + ": " + self.departure + ", " + \
                MongoRouteFields.ARRIVAL + ": " + self.arrival + ", " + \
                MongoRouteFields.PRODUCTS + ": " + productsString + \
-               MongoRouteFields.STRATEGY + ": " + self.strategy + ")"
+               MongoRouteFields.STRATEGY + ": " + self.strategy.STRATEGY_NAME + ")"
 
 
     ### function: toJson ###
@@ -64,5 +64,5 @@ class EntityRoute :
             MongoRouteFields.DEPARTURE : self.departure,
             MongoRouteFields.ARRIVAL : self.arrival,
             MongoRouteFields.PRODUCTS : products,
-            MongoRouteFields.STRATEGY: self.strategy
+            MongoRouteFields.STRATEGY: self.strategy.STRATEGY_NAME
         }

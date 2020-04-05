@@ -1,6 +1,7 @@
 import logging
 
 from src.api_rest.model.entity.EntityRoute import EntityRoute
+from src.api_rest.model.planning_strategies.StochasticVRPMultiDepotStrategy import StochasticVRPMultiDepotStrategy
 from src.api_rest.service.ProductService import modifyProductsStock
 from src.api_rest.utils import toRoutes, toProducts, ProdutOperation
 from src.commons import MongoCollection, MongoRouteFields, RouteState
@@ -29,6 +30,11 @@ def getRoutes (filters = None) :
 
 def addRoute (origin, destiny, departure, arrival, productsMongo, strategy) :
     try :
+        if strategy == StochasticVRPMultiDepotStrategy.STRATEGY_NAME :
+            strategy = StochasticVRPMultiDepotStrategy ()
+        else :
+            raise Exception ("Unknow strategy '" + strategy + "'")
+
         route = EntityRoute (origin, destiny, departure, arrival, toProducts (productsMongo), strategy)
 
         MongoClientSingleton ().getCollection (MongoCollection.ROUTE).insertOne (route.toJson ())

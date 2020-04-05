@@ -5,8 +5,10 @@ from src.api_rest.model.entity.EntityLocationForecast import EntityLocationForec
 from src.api_rest.model.entity.EntityPlan import EntityPlan
 from src.api_rest.model.entity.EntityProduct import EntityProduct
 from src.api_rest.model.entity.EntityRoute import EntityRoute
+from src.api_rest.model.planning_strategies.StochasticVRPMultiDepotStrategy import StochasticVRPMultiDepotStrategy
 from src.commons import MongoProductFields, MongoRouteFields, MongoDayHourForecastFields, MongoLocationForecastFields, \
     MongoPlanFields
+
 
 ################################################################################
 # class: ProdutOperation
@@ -58,13 +60,18 @@ def toRoutes (mongoCursor) :
         routes = []
 
         for route in mongoCursor :
+            strategy = None
+
+            if route [MongoRouteFields.STRATEGY] == StochasticVRPMultiDepotStrategy.STRATEGY_NAME :
+                strategy = StochasticVRPMultiDepotStrategy ()
+
             routes.append (EntityRoute (
                 route [MongoRouteFields.ORIGIN],
                 route [MongoRouteFields.DESTINY],
                 route [MongoRouteFields.DEPARTURE],
                 route [MongoRouteFields.ARRIVAL],
                 toProducts (route [MongoRouteFields.PRODUCTS]),
-                route [MongoRouteFields.STRATEGY],
+                strategy,
                 route [MongoRouteFields.ID],
                 route [MongoRouteFields.STATE]
             ))
