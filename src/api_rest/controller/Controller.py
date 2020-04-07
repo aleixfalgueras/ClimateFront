@@ -6,9 +6,8 @@ from src.api_rest.service.PlanService import getPlans, addPlan
 from src.api_rest.service.ProductService import getProducts, checkProductsStock
 from src.api_rest.service.RouteService import getRoutes, addRoute, checkEditRoute, cancelRoute, updateRoute
 from src.api_rest.utils import toJsonArray, toProducts
-from src.commons import MongoRouteFields, RouteState, MongoProductFields
+from src.commons import MongoRouteFields, RouteState, MongoProductFields, MongoPlanFields
 from src.config import DevelopmentConfig
-
 
 ################################################################################
 # app
@@ -114,7 +113,8 @@ def get_routes () :
         return jsonify (toJsonArray (getRoutes (fields)))
 
 
-### GET: PUT: get_route
+### GET, PUT: get_route
+
 @app.route ('/routes/<string:route_id>', methods = ["GET", "PUT"])
 def get_route (route_id) :
     route = getRoutes ({MongoRouteFields.ID : route_id})
@@ -195,10 +195,26 @@ def cancel_route (route_id) :
             raise BadRequest ("Only can cancel routes with state '" + RouteState.PENDING + "'", 400105)
 
 
+################################################################################
+# Plan
+################################################################################
+
 ### GET: get_plans
+
 @app.route ('/plans')
 def get_plans () :
     return jsonify (toJsonArray (getPlans ()))
+
+
+### GET: get_plan
+
+@app.route ('/plans/<string:plan_id>')
+def get_plan (plan_id) :
+    plan = getPlans ({MongoPlanFields.ID : plan_id})
+
+    if len (plan) == 0 : raise BadRequest ("Plan with id '" + plan_id + "' not found", 400201)
+    else:                return jsonify (plan [0].toJson ())
+
 
 
 ########################################################################################################################
