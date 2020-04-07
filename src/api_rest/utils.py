@@ -144,6 +144,7 @@ def toPlans (mongoCursor) :
                 toRoutes ([plan [MongoPlanFields.ROUTE]]) [0],
                 plan [MongoPlanFields.PLAN],
                 toLocationForecasts (plan [MongoPlanFields.LOCATION_FORECASTS]),
+                plan [MongoPlanFields.ID],
                 plan [MongoPlanFields.DATE_CREATION],
                 plan [MongoPlanFields.HOUR_CREATION]
             ))

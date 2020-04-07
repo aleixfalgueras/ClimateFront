@@ -74,6 +74,7 @@ class MongoLocationForecastFields:
 ################################################################################
 
 class MongoPlanFields :
+    ID = "id"
     ROUTE = "route"
     PLAN = "plan"
     LOCATION_FORECASTS = "location_forecasts"
