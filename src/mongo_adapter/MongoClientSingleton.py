@@ -50,7 +50,7 @@ class MongoClientSingleton :
 
         def close (self) :
             try:
-                self.close = self.connection.close ()
+                self.connection.close ()
 
             except Exception as exc:
                 logging.error ("__MongoClientSingleton: Error closing connection")
