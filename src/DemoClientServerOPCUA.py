@@ -2,7 +2,7 @@ import logging
 import sys
 
 from src import config
-from src.commons import MongoCollection
+from src.commons import MongoCollection, MongoProductFields
 from src.mongo_adapter.MongoClientSingleton import MongoClientSingleton
 from src.opcua_communication.ClientOPCUA import ClientOPCUA
 from src.opcua_communication.ServerOPCUASimulation import ServerOPCUASimulation
@@ -29,6 +29,7 @@ def startDemo ():
 
     return server, client
 
+
 ### function: showStock ###
 
 def showStock (client):
@@ -41,11 +42,21 @@ def showStock (client):
     print ("Stock bananas: " + str (varBananas.get_value ()))
     print ("Stock apples: " + str (varApples.get_value ()))
 
+
+### function: resetStock ###
+
+def resetStock ():
+    MongoClientSingleton ().getCollection (MongoCollection.PRODUCT).updateOneFieldById ("2", MongoProductFields.QUANTITY, str (0))
+    MongoClientSingleton ().getCollection (MongoCollection.PRODUCT).updateOneFieldById ("3", MongoProductFields.QUANTITY, str (0))
+    MongoClientSingleton ().getCollection (MongoCollection.PRODUCT).updateOneFieldById ("4", MongoProductFields.QUANTITY, str (0))
+    print ("Server stock reset!\n")
+
 ### function: incrementStock ###
 
-def incrementStock (server):
-    server.incrementStock ()
+def newInput (server):
+    server.incrementRandomStock ()
     print ("Server stock incremented successfully\n")
+
 
 ### function: stopServer ###
 
@@ -65,8 +76,9 @@ server, client = startDemo ()
 
 print ("\nDemo Client - Server OPC UA\n")
 print ("1: Show stock")
-print ("2: Increment stock")
-print ("3: Stop server")
+print ("2: Reset stock")
+print ("3: New stock input")
+print ("4: Stop server")
 
 running = True
 
@@ -74,7 +86,8 @@ while running:
     actionCode = input ("\nTell me what to do!\n")
 
     if   actionCode == "1": showStock (client)
-    elif actionCode == "2": incrementStock (server); showStock (client)
-    elif actionCode == "3": stopServer (server)
+    if   actionCode == "2": resetStock ()
+    elif actionCode == "3": newInput (server); showStock (client)
+    elif actionCode == "4": stopServer (server)
     else:
         print ("Sorry I don't know the action code: " + actionCode + "")
