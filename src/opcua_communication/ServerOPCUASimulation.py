@@ -81,13 +81,12 @@ class ServerOPCUASimulation :
             logging.error ("[Exception: " + str (exc) + "]")
 
 
-    ### function: incrementStock ###
+    ### function: incrementRandomStock ###
 
-    def incrementStock (self) :
+    def incrementRandomStock (self) :
         try :
             for item in self.stockItems :
-                quantity = randint (1, 10) # 1 <= x <= 10
-                newQuantity = item.get_value () + quantity
+                newQuantity = randint (1, 10) # 1 <= x <= 10
 
                 item.set_value (newQuantity)
 

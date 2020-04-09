@@ -2,7 +2,8 @@ import logging
 
 from opcua import Client
 
-from src.opcua_communication.SubscriptionHandler import SubscriptionHandler, SubscriptionMongoCollectionHandler
+from src.opcua_communication.subscription.SubscriptionHandler import SubscriptionHandler
+from src.opcua_communication.subscription.SubscriptionMongoCollectionHandler import SubscriptionMongoCollectionHandler
 
 
 ################################################################################

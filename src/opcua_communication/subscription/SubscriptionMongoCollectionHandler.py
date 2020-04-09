@@ -4,18 +4,6 @@ from src.commons import MongoProductFields, MongoCollection
 
 
 ################################################################################
-# class: SubscriptionHandler
-################################################################################
-
-class SubscriptionHandler () :
-
-    ### function: datachange_notification ###
-
-    def datachange_notification (self, node, val, data) :
-        print ("Node:", node, "Value:", val, "Data:", data)
-
-
-################################################################################
 # class: SubscriptionMongoCollectionHandler
 ################################################################################
 
@@ -39,7 +27,10 @@ class SubscriptionMongoCollectionHandler () :
             if (self.collectionWrapper.collectionName == MongoCollection.PRODUCT):
                 id = str (node) [26 :-2]  # Node(NumericNodeId(ns=2;i=2))
 
-                self.collectionWrapper.updateOneFieldById (id, MongoProductFields.QUANTITY, str (val))
+                oldQuantity = self.collectionWrapper.collection.find ({MongoProductFields.ID : id}) [0] [MongoProductFields.QUANTITY]
+                newQuantity = int (oldQuantity) + int (val)
+
+                self.collectionWrapper.updateOneFieldById (id, MongoProductFields.QUANTITY, str (newQuantity))
             else :
                 raise Exception ("Unknow collection to subscribe. Collection name: " + self.collectionWrapper.collectionName)
 

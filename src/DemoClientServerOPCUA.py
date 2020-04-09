@@ -51,6 +51,7 @@ def resetStock ():
     MongoClientSingleton ().getCollection (MongoCollection.PRODUCT).updateOneFieldById ("4", MongoProductFields.QUANTITY, str (0))
     print ("Server stock reset!\n")
 
+
 ### function: incrementStock ###
 
 def newInput (server):
