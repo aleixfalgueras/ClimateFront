@@ -77,13 +77,13 @@ class ServerOPCUASimulation :
             return stockItems
 
         except Exception as exc :
-            logging.error ("ServerOPCUASimulation: addStock: Error adding stock to the OPCUA Server Simulation")
+            logging.error ("ServerOPCUASimulation: addStock: Error adding products stock")
             logging.error ("[Exception: " + str (exc) + "]")
 
 
-    ### function: incrementRandomStock ###
+    ### function: randomStockInput ###
 
-    def incrementRandomStock (self) :
+    def randomStockInput (self) :
         try :
             for item in self.stockItems :
                 newQuantity = randint (1, 10) # 1 <= x <= 10
@@ -91,7 +91,7 @@ class ServerOPCUASimulation :
                 item.set_value (newQuantity)
 
         except Exception as exc :
-            logging.error ("ServerOPCUASimulation: incrementStock: Error incrementing stock in OPCUA Server Simulation")
+            logging.error ("ServerOPCUASimulation: randomStockInput: Error reseting stock.")
             logging.error ("[Exception: " + str (exc) + "]")
 
 

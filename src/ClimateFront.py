@@ -75,7 +75,7 @@ def resetStock (productCollection, printMessage = True):
 ### function: incrementStock ###
 
 def newInput (server):
-    server.incrementRandomStock ()
+    server.randomStockInput ()
     print ("New input processed successfully.\n")
 
 
