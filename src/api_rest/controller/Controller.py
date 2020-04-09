@@ -203,7 +203,10 @@ def cancel_route (route_id) :
 
 @app.route ('/plans')
 def get_plans () :
-    return jsonify (toJsonArray (getPlans ()))
+    fields = {}
+    if "routeId" in request.args : fields ["route.id"] = request.args ["routeId"]
+
+    return jsonify (toJsonArray (getPlans (fields)))
 
 
 ### GET: get_plan
