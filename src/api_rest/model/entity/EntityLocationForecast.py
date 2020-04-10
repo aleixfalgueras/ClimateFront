@@ -1,3 +1,4 @@
+from src.api_rest.model.entity.Entity import Entity
 from src.commons import MongoLocationForecastFields
 
 
@@ -5,7 +6,7 @@ from src.commons import MongoLocationForecastFields
 # class: EntityLocationForecast
 ################################################################################
 
-class EntityLocationForecast :
+class EntityLocationForecast (Entity) :
 
     ENTITY_NAME = "LocationForecast"
 

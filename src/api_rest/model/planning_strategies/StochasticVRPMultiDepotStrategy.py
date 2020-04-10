@@ -7,7 +7,7 @@ from src.services.openWeatherMap.OpenWeatherMap import getCityForecast
 # class: StochasticVRPMultiDepotStrategy
 ################################################################################
 
-class StochasticVRPMultiDepotStrategy (Strategy):
+class StochasticVRPMultiDepotStrategy (Strategy) :
 
     STRATEGY_NAME = "StochasticVRPMultiDepotStrategy"
 

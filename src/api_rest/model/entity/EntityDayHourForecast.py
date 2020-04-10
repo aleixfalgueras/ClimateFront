@@ -1,3 +1,4 @@
+from src.api_rest.model.entity.Entity import Entity
 from src.commons import MongoDayHourForecastFields
 
 
@@ -5,7 +6,7 @@ from src.commons import MongoDayHourForecastFields
 # class: EntityDayHourForecast
 ################################################################################
 
-class EntityDayHourForecast :
+class EntityDayHourForecast (Entity) :
 
     ENTITY_NAME = "DayHourForecast"
 

@@ -1,3 +1,4 @@
+from src.api_rest.model.entity.Entity import Entity
 from src.commons import MongoProductFields
 
 
@@ -5,7 +6,7 @@ from src.commons import MongoProductFields
 # class: EntityProduct
 ################################################################################
 
-class EntityProduct () :
+class EntityProduct (Entity) :
 
     ENTITY_NAME = "Product"
 

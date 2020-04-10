@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
 
+from src.api_rest.model.entity.Entity import Entity
 from src.commons import MongoPlanFields
 
 
@@ -8,7 +9,7 @@ from src.commons import MongoPlanFields
 # class: EntityPlan
 ################################################################################
 
-class EntityPlan:
+class EntityPlan (Entity) :
 
     ENTITY_NAME = "Plan"
 

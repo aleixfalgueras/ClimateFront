@@ -1,5 +1,6 @@
 import time
 
+from src.api_rest.model.entity.Entity import Entity
 from src.commons import MongoRouteFields, RouteState
 
 
@@ -7,7 +8,7 @@ from src.commons import MongoRouteFields, RouteState
 # class: EntityRoute
 ################################################################################
 
-class EntityRoute :
+class EntityRoute (Entity) :
 
     ENTITY_NAME = "Route"
 
@@ -51,18 +52,3 @@ class EntityRoute :
 
     ### function: toJson ###
 
-    def toJson (self) :
-        products = []
-
-        for product in self.products: products.append (product.toJson ())
-
-        return {
-            MongoRouteFields.ID : self.id,
-            MongoRouteFields.STATE : self.state,
-            MongoRouteFields.ORIGIN : self.origin,
-            MongoRouteFields.DESTINY : self.destiny,
-            MongoRouteFields.DEPARTURE : self.departure,
-            MongoRouteFields.ARRIVAL : self.arrival,
-            MongoRouteFields.PRODUCTS : products,
-            MongoRouteFields.STRATEGY: self.strategy.STRATEGY_NAME
-        }
