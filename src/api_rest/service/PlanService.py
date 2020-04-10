@@ -25,9 +25,9 @@ def getPlans (filters = None) :
 
 ### function: addPlan ###
 
-def addPlan (route):
+def addPlan (route) :
     try :
-        plan = route.strategy.planIt (route)
+        plan = route.strategy.planIt (route) # all strategies must implement this method
 
         MongoClientSingleton ().getCollection (MongoCollection.PLAN).insertOne (plan.toJson ())
 

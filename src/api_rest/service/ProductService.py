@@ -46,7 +46,7 @@ def checkProductsStock (products) :
 
 ### function: incrementProductsStock ###
 
-def modifyProductsStock (products, operation):
+def modifyProductsStock (products, operation) :
     try :
         productCollection = MongoClientSingleton ().getCollection (MongoCollection.PRODUCT)
 

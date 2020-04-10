@@ -28,14 +28,14 @@ def getRoutes (filters = None) :
 
 ### function: addRoute ###
 
-def addRoute (origin, destiny, departure, arrival, productsMongo, strategy) :
+def addRoute (origin, destiny, departure, arrival, productsJson, strategy) :
     try :
         if strategy == StochasticVRPMultiDepotStrategy.STRATEGY_NAME :
             strategy = StochasticVRPMultiDepotStrategy ()
         else :
             raise Exception ("Unknow strategy '" + strategy + "'")
 
-        route = EntityRoute (origin, destiny, departure, arrival, toProducts (productsMongo), strategy)
+        route = EntityRoute (origin, destiny, departure, arrival, toProducts (productsJson), strategy)
 
         MongoClientSingleton ().getCollection (MongoCollection.ROUTE).insertOne (route.toJson ())
 
@@ -45,7 +45,7 @@ def addRoute (origin, destiny, departure, arrival, productsMongo, strategy) :
 
     except Exception as exc :
         logging.error ("RouteService: addRoute: Error addind route. Params: " + origin + ", " + destiny + ", " + \
-                       departure + ", " + arrival + ", " + productsMongo)
+                       departure + ", " + arrival + ", " + productsJson)
         logging.error ("[Exception: " + str (exc) + "]")
 
 
@@ -58,7 +58,7 @@ def checkEditRoute (route) :
 
 ### function: updateRoute ###
 
-def updateRoute (originalRoute, fieldsToUpdate):
+def updateRoute (originalRoute, fieldsToUpdate) :
     MongoClientSingleton ().getCollection (MongoCollection.ROUTE).updateOneById (originalRoute.id, fieldsToUpdate)
 
     return getRoutes ({MongoRouteFields.ID : originalRoute.id}) [0]
